@@ -1,0 +1,9 @@
+{
+"version":3,
+"file":"shadow.js.shim.module$react_slick.js",
+"lineCount":5,
+"mappings":"AAAAA,IAAKC,CAAAA,OAAL,CAAa,mCAAb,CAAA;AACAD,IAAKC,CAAAA,OAAL,CAAa,0CAAb,CAAA;AACAC,MAAOC,CAAAA,EAAGC,CAAAA,IAAKC,CAAAA,kBAAf,GAAoCC,OAAA,CAAQ,aAAR,CAApC;AACAC,wCAAyCC,CAAAA,OAAzC,GAAmDN,MAAOC,CAAAA,EAAGC,CAAAA,IAAKC,CAAAA,kBAAlE;;",
+"sources":["shadow.js.shim.module$react_slick.js"],
+"sourcesContent":["goog.provide(\"shadow.js.shim.module$react_slick\");\ngoog.provide(\"module$shadow_js_shim_module$react_slick\");\nshadow.js.shim.module$react_slick = require(\"react-slick\");\nmodule$shadow_js_shim_module$react_slick.default = shadow.js.shim.module$react_slick;\n"],
+"names":["goog","provide","shadow","js","shim","module$react_slick","require","module$shadow_js_shim_module$react_slick","default"]
+}

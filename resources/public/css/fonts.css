@@ -1,0 +1,17 @@
+/* Fonts */
+
+@font-face {
+  font-family: "Avenir LT Std Medium";
+  src: url("../avenir-lt-std-cufonfonts/AvenirLTStd-Medium.otf")
+}
+
+@font-face {
+  font-family: "Avenir LT Std Black";
+  src: url("../avenir-lt-std-cufonfonts/AvenirLTStd-Black.otf")
+}
+
+
+@font-face {
+  font-family: "Avenir LT Std Book";
+  src: url("../avenir-lt-std-cufonfonts/AvenirLTStd-Book.otf")
+}

@@ -1,0 +1,1 @@
+["^ ","~$wait",["^ ","~:row",3,"~:col",1,"~:fixed-arities",["~#set",[2]],"~:name","^0","~:ns","~$jayq.util","~:top-ns","^7"],"~$log",["^ ","^1",6,"^2",1,"~:varargs-min-arity",1,"^5","^9","^6","^7","^8","^7"],"~:filename","/Users/margoobraztsova/.m2/repository/jayq/jayq/2.5.4/jayq-2.5.4.jar:jayq/util.cljs"]

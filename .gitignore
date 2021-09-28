@@ -1,0 +1,13 @@
+/resources/public/js/compiled/cljs-runtime
+figwheel_server.log
+pom.xml
+*jar
+/lib/
+/classes/
+/out/
+node_modules/
+.lein-deps-sum
+.lein-repl-history
+.lein-plugins/
+.repl
+.nrepl-port
