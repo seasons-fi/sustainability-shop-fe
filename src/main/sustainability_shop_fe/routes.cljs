@@ -1,6 +1,6 @@
 (ns sustainability-shop-fe.routes
   (:require [sustainability-shop-fe.views :refer [home-page add-page]]
-            [sustainability-shop-fe.map :refer [map-page drawmap]]
+            [sustainability-shop-fe.map :refer [map-page]]
             [schema.core :as s]
             [reitit.coercion.schema]
             [reitit.coercion.spec :as rss]))

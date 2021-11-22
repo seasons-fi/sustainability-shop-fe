@@ -3,9 +3,14 @@
 
 
 (def state-app (reagent/atom {:match {}
+                              :mode "map"
+                              :mapBox nil
+                              :geoJsonData []
+                              :locationsInMap []
                               :places []
                               :companies []
-                              :selectedLocation (atom nil)}))
+                              :selectedLocation nil
+                              :search-value nil}))
 
 (add-watch state-app
            :new
