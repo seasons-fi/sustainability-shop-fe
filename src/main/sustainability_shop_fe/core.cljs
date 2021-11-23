@@ -1,10 +1,9 @@
 (ns sustainability-shop-fe.core
   (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [sustainability-shop-fe.views :refer [navigation home-page add-page]]
+  (:require [sustainability-shop-fe.views :refer [navigation]]
             [sustainability-shop-fe.map-utils :refer [turn-realtime-db-to-geojson]]
             [sustainability-shop-fe.state :refer [state-app]]
             [sustainability-shop-fe.routes :refer [routes]]
-            ;; [schema.core :as s]
             [reagent.dom :as rd]
             [goog.events]
             [reitit.frontend :as rf]
@@ -12,9 +11,7 @@
             [reitit.coercion.schema]
             [reitit.coercion.spec :as rss]
             [cljs-http.client :as http]
-            [cljs.core.async :refer [<!]])
-  (:import
-   [goog.history Html5History EventType]))
+            [cljs.core.async :refer [<!]]))
 
 (enable-console-print!)
 
@@ -28,13 +25,13 @@
 
 ;;http://52.47.131.189:443/companies
 
-(defn get-companies-api []
-  (go (let [response (<! (http/get "http://52.47.131.189:443/companies"
-                                ;; parameters
-                                   {:with-credentials? false}))]
-        ;; (reset! state-app (assoc-in @state-app [:companies] (js->clj (. js/JSON (parse (:body response))) :keywordize-keys true)))
-        (js/console.log
-         response))))
+;; (defn get-companies-api []
+;;   (go (let [response (<! (http/get "http://52.47.131.189:443/companies"
+;;                                 ;; parameters
+;;                                    {:with-credentials? false}))]
+;;         ;; (reset! state-app (assoc-in @state-app [:companies] (js->clj (. js/JSON (parse (:body response))) :keywordize-keys true)))
+;;         (js/console.log
+;;          response))))
 
 ;; (defn add-place-api []
 ;;   (go (let [response (<! (http/post "http://localhost:443/places"

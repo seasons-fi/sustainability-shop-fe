@@ -1,40 +1,23 @@
 # sustainability-shop-fe
 
-FIXME: Write a one-line description of your library/project.
-
-## Overview
-
-FIXME: Write a paragraph about the library/project and highlight its goals.
+Front-End written with ClojureScript and shadow for seasons.eco project
 
 ## Setup
 
 To get an interactive development environment run:
 
-    npm install
-    lein figwheel
+    yarn install
+    shadow-cljs watch app
 
-and open your browser at [localhost:3449](http://localhost:3449/).
+and open your browser at [http://localhost:8080](http://localhost:8080/).
+
 This will auto compile and send all changes to the browser without the
-need to reload. After the compilation process is complete, you will
-get a Browser Connected REPL. An easy way to try it is:
-
-    (js/alert "Am I connected?")
-
-and you should see an alert in the browser window.
-
-To clean all compiled files:
-
-    lein clean
-
-To create a production build run:
-
-    lein do clean, cljsbuild once min
-
+need to reload.
 And open your browser in `resources/public/index.html`. You will not
-get live reloading, nor a REPL. 
+get live reloading, nor a REPL.
 
-## License
+## Data and State management
 
-Copyright © 2014 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at your option) any later version.
+In order to receive a JSON file with map features, you need to have a backend server running.
+http://localhost:443/ localhost or
+http://52.47.131.189:443/
