@@ -1,5 +1,5 @@
 (ns sustainability-shop-fe.state
-  (:require [reagent.core :as reagent :refer [atom]]))
+  (:require [reagent.core :as reagent]))
 
 
 (def state-app (reagent/atom {:match {}
@@ -10,7 +10,8 @@
                               :places []
                               :companies []
                               :selectedLocation nil
-                              :search-value nil}))
+                              :search-value nil
+                              }))
 
 (add-watch state-app
            :new
