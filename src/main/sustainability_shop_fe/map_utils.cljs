@@ -103,3 +103,11 @@
                                    {:with-credentials? false}))]
         (reset! state-app (assoc-in @state-app [:places] (turn-realtime-db-to-geojson (:body response))))
         (reset! state-app (assoc-in @state-app [:geoJsonData] (.stringify js/JSON (turn-realtime-db-to-geojson (:body response))))))))
+
+;; https://gist.githubusercontent.com/marharyta/fa3213c1cc4a31526efba46bb1da04b3/raw/55d3bb0850bc32500e222c8e776b4c9d22c97d46/test.geojson
+
+;; (defn fetch-link! []
+;;   (go (reset! geoJsonData
+;;               (js->clj (:body
+;;                         (<! (http/get "https://gist.githubusercontent.com/marharyta/fa3213c1cc4a31526efba46bb1da04b3/raw/55d3bb0850bc32500e222c8e776b4c9d22c97d46/test.geojson"
+;;                                       {:with-credentials? false})))))))

@@ -6,7 +6,6 @@
             ["leaflet" :as leaflet]
             ["leaflet.locatecontrol" :as leaflet.locatecontrol]
             ["leaflet.markercluster" :as leaflet.markercluster]
-            ;; [cljs-http.client :as http]
             ;; [alandipert.storage-atom :refer [local-storage]]
             [cognitect.transit :as t]
             [reitit.frontend.easy :as rfe]
@@ -47,13 +46,10 @@
                        :tileSize 512
                        :zoomOffset -1})]
     (. mapbox (setView #js [60.1699, 24.9384] 13))
-    (. newTiles (addTo mapbox))
-    (js/console.log "map initilized")))
+    (. newTiles (addTo mapbox))))
 
 (defn selected-location [selectedLocation geoJsonData]
   (reagent/create-class {:component-did-update (fn [selectedLocation geoJsonData]
-                                                 
-                                             
                                                (when (and (:selectedLocationID @state-app) (:geoJsonData @state-app) (:mapBox @state-app))
                                                  (let [selectedLocationById
                                                        (nth
@@ -63,18 +59,9 @@
                                                   
                                                    (reset-map-to-point #js{:lat (last (:coordinates (:geometry selectedLocationById))) :lng (first (:coordinates (:geometry selectedLocationById)))} (:mapBox @state-app))
                                                    (reset! state-app (assoc-in @state-app [:selectedLocation] (js->clj selectedLocationById :keywordize-keys true)))
-                                                   
-                                                   )
-                                               )
-                                             )
-                                                ;;  (js/console.log "smallMapContainer" @smallMapContainer)
-                                                ;;  (initialize-map (leaflet/map "smallmapid"))
-                                                 
-                                                
+                                                   )))                     
                          :reagent-render (fn [selectedLocation geoJsonData]
-                                           
                                            (when selectedLocation
-
                                              [:div {:class "bg-white relative w-4/5 h-56 p-6 z-10 mx-auto block"}
                                               [:button {:onClick (fn []
                                                                    (reset! state-app (assoc-in @state-app [:selectedLocation] nil))
@@ -124,27 +111,14 @@
 (defn switch []
   [:div.row.switch
    [:button {:onClick (fn [] 
-                        (reset! state-app (assoc-in @state-app [:mode] "list"))
-                        
-                        )
+                        (reset! state-app (assoc-in @state-app [:mode] "list")))
              :type "button"
              :class (str "btn " (when-not (= (:mode @state-app) "map") "bold"))} "List"]
    "/"
    [:button {:onClick (fn [] 
-                        
-                        (reset! state-app (assoc-in @state-app [:mode] "map"))
-                        )
+                        (reset! state-app (assoc-in @state-app [:mode] "map")))
              :type "button"
              :class (str "btn " (when (= (:mode @state-app) "map") "bold"))} "Map (eco-friendly stores nearby)"]])
-
-
-
-
-;; (defn fetch-link! []
-;;   (go (reset! geoJsonData
-;;               (js->clj (:body
-;;                         (<! (http/get "https://gist.githubusercontent.com/marharyta/fa3213c1cc4a31526efba46bb1da04b3/raw/55d3bb0850bc32500e222c8e776b4c9d22c97d46/test.geojson"
-;;                                       {:with-credentials? false})))))))
 
 
 ;; (defn initialize-location-handling [mapbox]
@@ -159,13 +133,9 @@
     (fn [f]
       [:div {:class "h-24 bg-white p-6 mr-3"
              :onClick (fn [evt]
-                        
                         (reset! state-app (assoc-in @state-app [:selectedLocation] (js->clj f :keywordize-keys true)))
-                        
-
                         (let [latlng (leaflet/latLng (nth (. (. f -geometry) -coordinates) 1)
                                                      (nth (. (. f -geometry) -coordinates) 0))]
-                          (js/console.log "latlng" (clj->js latlng))
                           (reset-map-to-point latlng mapbox))
                         (rfe/href (keyword "sustainability-shop-fe.routes" "map-item") {:id (:id (:properties (js->clj f :keywordize-keys true)))})
                         (rfe/push-state (keyword "sustainability-shop-fe.routes" "map-item") {:id (:id (:properties (js->clj f :keywordize-keys true)))}))}
@@ -191,7 +161,6 @@
                                  (. (leaflet/marker latlng)
                                     (addEventListener "click"
                                                       (fn []
-                                                        (js/console.log "latlng mapbox" latlng mapbox)
                                                         (reset-map-to-point latlng mapbox)
                                                         (reset! state-app (assoc-in @state-app [:selectedLocation] (js->clj feature :keywordize-keys true)))
                                                         (rfe/href (keyword "sustainability-shop-fe.routes" "map-item") {:id (:id (:properties (js->clj feature :keywordize-keys true)))})
@@ -222,33 +191,11 @@
                                             true
                                            false))))})]
     (reset! global-geojsonLayer geojsonLayer)
-    (js/console.log "geojsonLayer" geojsonLayer)
     (. geojsonLayer
        (addTo mapbox))))
 
- ;; (reset! locationsInMap
-  ;;         (mapv
-  ;;          (fn [feat]
-  ;;            (let [f (leaflet/latLng (nth (. (. feat -geometry) -coordinates) 1)
-  ;;                                    (nth (. (. feat -geometry) -coordinates) 0))]
-  ;;              (when (. (. mapbox getBounds)
-  ;;                       (contains
-  ;;                        f))
-  ;;                feat)))
-  ;;          (. (first (.parse js/JSON geoJsonData)) -features)))
-
 (defn initialize-features-in-view-selection [mapbox geoJsonData]
   (. mapbox (addEventListener "moveend" (fn []
-                                          ;; (reset! locationsInMap
-                                          ;;         (mapv
-                                          ;;          (fn [feat]
-                                          ;;            (let [f (leaflet/latLng (nth (. (. feat -geometry) -coordinates) 1)
-                                          ;;                                    (nth (. (. feat -geometry) -coordinates) 0))]
-                                          ;;              (when (. (. mapbox getBounds)
-                                          ;;                       (contains
-                                          ;;                        f))
-                                          ;;                feat)))
-                                          ;;          (. (first (.parse js/JSON geoJsonData)) -features)))
                                           
                                           (when-not (empty? (.parse js/JSON geoJsonData))
                                            (reset! state-app (assoc-in @state-app [:locationsInMap] 
@@ -264,27 +211,7 @@
                                           
                                           )))
   (. mapbox (addEventListener "zoomend" (fn []
-                                          ;; (reset! locationsInMap
-                                          ;;         (mapv
-                                          ;;          (fn [feat]
-                                          ;;            (let [f (leaflet/latLng (nth (. (. feat -geometry) -coordinates) 1)
-                                          ;;                                    (nth (. (. feat -geometry) -coordinates) 0))]
-                                          ;;              (when (. (. mapbox getBounds)
-                                          ;;                       (contains
-                                          ;;                        f))
-                                          ;;                feat)))
-                                          ;;          (. (first (.parse js/JSON geoJsonData)) -features)))
                                           
-                                          ;; (reset! state-app (assoc-in @state-app [:locationsInMap]
-                                          ;;                             (mapv
-                                          ;;                              (fn [feat]
-                                          ;;                                (let [f (leaflet/latLng (nth (. (. feat -geometry) -coordinates) 1)
-                                          ;;                                                        (nth (. (. feat -geometry) -coordinates) 0))]
-                                          ;;                                  (when (. (. mapbox getBounds)
-                                          ;;                                           (contains
-                                          ;;                                            f))
-                                          ;;                                    feat)))
-                                          ;;                              (. (first (.parse js/JSON geoJsonData)) -features))))
                                           (when-not (empty? (.parse js/JSON geoJsonData))
                                            (reset! state-app (assoc-in @state-app [:locationsInMap] 
                                                                       (mapv
@@ -425,7 +352,6 @@
   (let [mapContainer (atom nil)]
     (reagent/create-class
      {:component-did-mount (fn []
-                             (js/console.log "mount")
                              (let [mapbox (leaflet/map "mapid" {:gestureHandling true})]
                                (initialize-map mapbox)
                                (initialize-location-handling mapbox)
@@ -434,9 +360,7 @@
                                  (do
                                    (initialize-geo (:mapBox @state-app) (:geoJsonData @state-app))
                                    (initialize-features-in-view-selection (:mapBox @state-app) (:geoJsonData @state-app)))
-                                 (do 
-                                   (js/console.log "empty")
-                                  (initialize-geo (:mapBox @state-app) yh)))
+                                 (initialize-geo (:mapBox @state-app) yh))
                                 ;;  (initialize-geo @mapBox @directionCol false)
                                ))
       :component-did-update (fn []
@@ -444,24 +368,10 @@
                                 (.. (clj->js @mapContainer) -attributeStyleMap (set "height" "40vh"))
                                 (.. (clj->js @mapContainer) -attributeStyleMap (set "height" "65vh")))
 
-                            ;; (if-not (clojure.string/blank? @search-value)
-                            ;;   (do
-                            ;;     ;; remove old layer
-                            ;;     (js/console.log (clj->js @mapBox) (clj->js (locations-in-search @search-value)))
-
-                            ;;     ;; (initialize-geo @mapBox (locations-in-search @search-value) true)
-                            ;;     )
-                            ;; (do 
-                            ;;     (initialize-features-in-view-selection @mapBox @geoJsonData))
-                              
                               (. @global-geojsonLayer remove)
-                              (js/console.log "update" (clj->js @state-app))
                               (initialize-geo (:mapBox @state-app) (:geoJsonData @state-app))
                               (initialize-features-in-view-selection (:mapBox @state-app) (:geoJsonData @state-app))
-                              ;; (do
-                              ;;   (initialize-geo (:mapBox @state-app) (:geoJsonData @state-app))
-                              ;;   (initialize-features-in-view-selection (:mapBox @state-app) (:geoJsonData @state-app)))
-                                ;; (initialize-geo @mapBox @directionCol false)
+                              
                               )
       :reagent-render #(map-render mapContainer "65vh")})))
 
@@ -471,9 +381,7 @@
   
   (let [locations-in-map-view (filter-locations state-app (:locationsInMap @state-app))
         id (:id (:path-params match))]
-    (js/console.log "set selected location" id (clj->js locations-in-map-view))
     (when id
-      
       (reset! state-app (assoc-in @state-app [:selectedLocationID] id)))
     [:div {:class "block relative py-16 h-full"}
      [switch]

@@ -4,8 +4,7 @@
             [sustainability-shop-fe.map-utils :refer [get-places-api]]
             [sustainability-shop-fe.state :refer [state-app]]
             [schema.core :as s]
-            [reitit.coercion.schema]
-            [reitit.coercion.spec :as rss]))
+            [reitit.coercion.schema]))
 
 
 ;; Page views
@@ -30,21 +29,15 @@
 
    ["map"
     {:coercion reitit.coercion.schema/coercion
-     :controllers [{:start (fn [_] (do 
-                                     (get-places-api state-app)
-                                     (js/console.log "root start" (clj->js @state-app))))}]
+     :controllers [{:start (fn [_] (get-places-api state-app))}]
      :view map-view}
     [""
      {:name ::map
       }]
     ["/:id"
      {:name ::map-item
-      ;; :view map-view
       :parameters {:path {:id s/Int}}
       :controllers [{:parameters {:path [:id]}
-                  :start (fn [parameters] (do 
-                                            ;; (reset-map-to-point latlng mapbox)
-                                            ;; (reset! state-app (assoc-in @state-app [:selectedLocation] (js->clj feature :keywordize-keys true)))
-                                            (js/console.log "item start" (-> parameters :path :id) (clj->js @state-app))))
+                  :start (fn [parameters] (js/console.log "item start" (-> parameters :path :id)))
                   :stop  (fn [parameters] (js/console.log "item stop" (-> parameters :path :id)))}]
       }]]])
