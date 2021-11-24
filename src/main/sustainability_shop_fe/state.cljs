@@ -11,6 +11,7 @@
                               :companies []
                               :selectedLocation nil
                               :search-value nil
+                              :selectedLocationID nil
                               }))
 
 (add-watch state-app

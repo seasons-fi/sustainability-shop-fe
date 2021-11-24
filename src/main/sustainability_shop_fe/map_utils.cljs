@@ -1,5 +1,8 @@
 (ns sustainability-shop-fe.map-utils
-  (:require [clojure.string :as str]))
+  (:require-macros [cljs.core.async.macros :refer [go]])
+  (:require [clojure.string :as str]
+            [cljs-http.client :as http]
+            [cljs.core.async :refer [<!]]))
 
 (defn to-lowercase [str]
   (clojure.string/lower-case str))
@@ -94,3 +97,9 @@
       locations)
      )
      ))
+
+(defn get-places-api [state-app]
+  (go (let [response (<! (http/get "http://localhost:443/places"
+                                   {:with-credentials? false}))]
+        (reset! state-app (assoc-in @state-app [:places] (turn-realtime-db-to-geojson (:body response))))
+        (reset! state-app (assoc-in @state-app [:geoJsonData] (.stringify js/JSON (turn-realtime-db-to-geojson (:body response))))))))

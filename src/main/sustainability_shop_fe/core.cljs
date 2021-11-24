@@ -1,7 +1,6 @@
 (ns sustainability-shop-fe.core
-  (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [sustainability-shop-fe.views :refer [navigation]]
-            [sustainability-shop-fe.map-utils :refer [turn-realtime-db-to-geojson]]
+            [sustainability-shop-fe.map-utils :refer [ get-places-api]]
             [sustainability-shop-fe.state :refer [state-app]]
             [sustainability-shop-fe.routes :refer [routes]]
             [reagent.dom :as rd]
@@ -10,18 +9,14 @@
             [reitit.frontend.easy :as rfe]
             [reitit.coercion.schema]
             [reitit.coercion.spec :as rss]
-            [cljs-http.client :as http]
-            [cljs.core.async :refer [<!]]))
+            [reitit.frontend.controllers :as rfc]
+           ))
 
 (enable-console-print!)
 
 (println "This text is printed from src/sustainability-shop-fe/core.cljs. Go ahead and edit it and see reloading in action.")
 
-(defn get-places-api [state-app]
-  (go (let [response (<! (http/get "http://localhost:443/places"
-                                   {:with-credentials? false}))]
-        (reset! state-app (assoc-in @state-app [:places] (turn-realtime-db-to-geojson (:body response))))
-        (reset! state-app (assoc-in @state-app [:geoJsonData] (.stringify js/JSON (turn-realtime-db-to-geojson (:body response))))))))
+
 
 ;;http://52.47.131.189:443/companies
 
@@ -104,9 +99,13 @@
 (defn init! []
   (rfe/start!
    router
-   (fn [m]
+   (fn [new-match]
+     
      (reset! state-app
-             (assoc @state-app :match m)))
+             (assoc @state-app :match 
+                    (when new-match
+            (assoc new-match
+              :controllers (rfc/apply-controllers (:controllers (:match @state-app)) new-match))))))
    ;; set to false to enable HistoryAPI
    {:use-fragment false})
   (mount-root))
