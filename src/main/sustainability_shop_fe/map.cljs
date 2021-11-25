@@ -172,7 +172,11 @@
                           ;;  :onEachFeature (fn [feature featureLayer])
                            :filter (fn [feature]
                                      (if (clojure.string/blank? (:search-value @state-app))
-                                       true
+                                       (if (:category @state-app)
+                                        (let [category (:category (:properties (js->clj feature :keywordize-keys true)))]
+                                          (= category (:category @state-app))
+                                          )
+                                        true)
                                        (let [name (:name (:properties (js->clj feature :keywordize-keys true)))
                                              address (:address (:properties (js->clj feature :keywordize-keys true)))
                                              city (:city (:properties (js->clj feature :keywordize-keys true)))]
@@ -311,7 +315,7 @@
         MyGeolocation  (. L.Control (extend #js{:onAdd (fn [map]
                                                          (let [image (. L.DomUtil (create "img"))
                                                               ;; text (. js/document (createTextNode "Hi there and greetings!"))
-                                                               di (. image (setAttribute "src" "./img/GroupS.png"))
+                                                               di (. image (setAttribute "src" "/img/GroupS.png"))
                                                                bi (. image (setAttribute "width" "30px"))
                                                                bii (. image (setAttribute "height" "30px"))
                                                                div (. image (addEventListener "click"
@@ -366,25 +370,27 @@
       :component-did-update (fn []
                               (if (:selectedLocation @state-app)
                                 (.. (clj->js @mapContainer) -attributeStyleMap (set "height" "40vh"))
-                                (.. (clj->js @mapContainer) -attributeStyleMap (set "height" "65vh")))
+                                (.. (clj->js @mapContainer) -attributeStyleMap (set "height" "73.5vh")))
 
                               (. @global-geojsonLayer remove)
                               (initialize-geo (:mapBox @state-app) (:geoJsonData @state-app))
                               (initialize-features-in-view-selection (:mapBox @state-app) (:geoJsonData @state-app))
                               
                               )
-      :reagent-render #(map-render mapContainer "65vh")})))
+      :reagent-render #(map-render mapContainer "73.5vh")})))
 
 
 
 (defn map-page [match state-app]
-  
   (let [locations-in-map-view (filter-locations state-app (:locationsInMap @state-app))
         id (:id (:path-params match))]
     (when id
       (reset! state-app (assoc-in @state-app [:selectedLocationID] id)))
-    [:div {:class "block relative py-16 h-full"}
-     [switch]
+    
+    [:<>
+    ;;  [:p (str (:name (:data match)))]
+    ;;  [switch]
+     [:div {:class "block relative pt-10 pb-16 h-full"}
      [:div {:class "block relative h-full"}
       (if  (= (:mode @state-app) "map")
         [:<>
@@ -402,4 +408,4 @@
                                 (reset! state-app (assoc-in @state-app [:search-value] (-> evt .-target .-value)))
                                 ;; (reset-map-to-point @mapBox)
                                 )}]]]
-        [list-of-brands (map (:geoJsonData @state-app))])]]))
+        [list-of-brands (map (:geoJsonData @state-app))])]]]))

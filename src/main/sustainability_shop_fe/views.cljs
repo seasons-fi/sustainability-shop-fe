@@ -32,10 +32,10 @@
           (fn [l]
             [:li {:class "block border-t-2 border-solid border-blue-600 py-3"}
              [:a {:class "block w-full text-right font-medium text-xl text-blue-600 font-avenir-medium"
-                  ;; :onClick (fn [evt]
-                  ;;           ;;  (. evt )
-                  ;;            (secretary/dispatch! (str "/map/" "re" (:name s))))
-                  :href (str "/map/" "re" (:name s))}
+                  :onClick (fn [evt]
+                            (reset! state-app (assoc-in @state-app [:category] (:link s)))
+                             )
+                  :href (str "/" (:link s))}
               l]])
           (:links s))]]])
     slides)])
@@ -46,13 +46,14 @@
 (defn navigation [{:keys [links]}]
   [:nav {:class "w-full relative px-3 pt-6 flex flex-row flex-no-wrap justify-between"}
    [:a {:class ""
-        :href "/"} [:img.max-50 {:src "./img/menu.svg"}]]
+        :href "/"} [:img.max-50 {:src "/img/menu.svg"}]]
    [:a {:class "border-2 border-solid border-blue-600 text-blue-600 rounded-full py-1 px-4 font-medium"
         :href "/map"}
     "map"]
-   [:a {:class "border-2 border-solid border-blue-600 text-blue-600 rounded-full py-1 px-4 font-medium"
-        :href "/add"}
-    "add"]])
+  ;;  [:a {:class "border-2 border-solid border-blue-600 text-blue-600 rounded-full py-1 px-4 font-medium"
+  ;;       :href "/add"}
+  ;;   "add"]
+   ])
 
 
 (defn home-page [{:keys [links]} & children]
@@ -63,15 +64,19 @@
   ;;        Verified sustainabkle brands in Helsinki."]
    [slick-slider [{:id 1
                    :name "duce"
+                   :link "reduce"
                    :links ["second hand" "flea markets" "vintage stores"]}
                   {:id 2
                    :name "use"
+                   :link "reuse"
                    :links ["second hand" "flea markets" "vintage stores"]}
                   {:id 3
                    :name "pair"
+                   :link "repair"
                    :links ["second hand" "flea markets" "vintage stores"]}
                   {:id 4
                    :name "cycle"
+                   :link "recycle"
                    :links ["second hand" "flea markets" "vintage stores"]}]]
   ;;  [:ul.brands
   ;;   [:li {:key 0} [:a {:href "/map"} "eco-conscious brands"]]

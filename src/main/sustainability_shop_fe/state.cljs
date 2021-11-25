@@ -12,6 +12,7 @@
                               :selectedLocation nil
                               :search-value nil
                               :selectedLocationID nil
+                              :category nil
                               }))
 
 (add-watch state-app

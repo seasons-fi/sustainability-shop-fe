@@ -47,6 +47,7 @@
                     :production (:production i)
                     :materials (:materials i)
                     :tags (:tags i)
+                    :category (:category i)
                     :keys (keys i)}
        :geometry {:type "Point"
                   :coordinates (if-not (empty? coordanates)
