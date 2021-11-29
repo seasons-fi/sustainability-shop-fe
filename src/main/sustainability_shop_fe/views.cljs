@@ -92,7 +92,7 @@
 
 
 (defn add-place-api [state-app]
-  (go (let [response (<! (http/post "http://localhost:443/places"
+  (go (let [response (<! (http/post "http://142.93.164.153:443/places"
                                 ;; parameters
                                     {:with-credentials? false
 
