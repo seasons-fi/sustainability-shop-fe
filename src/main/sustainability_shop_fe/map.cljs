@@ -199,6 +199,17 @@
        (addTo mapbox))))
 
 (defn initialize-features-in-view-selection [mapbox geoJsonData]
+  (when-not (empty? (.parse js/JSON geoJsonData))
+                                           (reset! state-app (assoc-in @state-app [:locationsInMap] 
+                                                                      (mapv
+                                                   (fn [feat]
+                                                     (let [f (leaflet/latLng (nth (. (. feat -geometry) -coordinates) 1)
+                                                                             (nth (. (. feat -geometry) -coordinates) 0))]
+                                                       (when (. (. mapbox getBounds)
+                                                                (contains
+                                                                 f))
+                                                         feat)))
+                                                   (. (first (.parse js/JSON geoJsonData)) -features)))))
   (. mapbox (addEventListener "moveend" (fn []
                                           
                                           (when-not (empty? (.parse js/JSON geoJsonData))
