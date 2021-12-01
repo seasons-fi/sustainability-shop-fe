@@ -233,7 +233,7 @@
 
 (defn map-render [mapContainer height]
   (fn []
-    [:div {:class "absolute top-0 z-0"
+    [:div {:class "relative top-0 z-0"
            :style {:height height}
            :id "mapid"
            :ref (fn [el]
@@ -396,13 +396,13 @@
       (if  (= (:mode @state-app) "map")
         [:<>
          [map-component (map (:geoJsonData @state-app)) (:search-value @state-app) (:selectedLocation @state-app)]
-         [:div {:class "absolute block w-full bottom-6"}
+         [:div {:class "sticky block w-full bottom-6"}
           (when-not (or (empty? locations-in-map-view) (:selectedLocation @state-app))
             [:div {:class "h-24 z-10"}
              [slick-slider locations-in-map-view (:mapBox @state-app)]])
 
           [selected-location (:selectedLocation @state-app) (:geoJsonData @state-app)]
-          [:input {:class " block absolute w-full h-10 border-2 border-solid border-blue-600 text-blue-600 rounded-full py-1 px-4 font-medium mt-3 z-50 bg-white"
+          [:input {:class " block sticky w-full h-10 border-2 border-solid border-blue-600 text-blue-600 rounded-full py-1 px-4 font-medium mt-3 z-50 bg-white"
                    :type "text"
                   ;; :value @search-value
                    :on-change (fn [evt]

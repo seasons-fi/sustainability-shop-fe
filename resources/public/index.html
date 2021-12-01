@@ -20,6 +20,7 @@
       href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
       rel="stylesheet"
     />
+
     <link
       rel="icon"
       href="https://clojurescript.org/images/cljs-logo-icon-32.png"
@@ -69,6 +70,31 @@
     />
 
     <link rel="stylesheet" type="text/css" href="/css/main.css" />
+
+    <style>
+      @supports (height: -webkit-fill-available) {
+        body {
+          min-height: 100vh;
+          /* mobile viewport bug fix */
+          min-height: -webkit-fill-available;
+        }
+
+        html {
+          height: -webkit-fill-available;
+        }
+
+        .h-screen {
+          height: 100vh;
+          height: -webkit-fill-available;
+        }
+
+        .min-h-screen {
+          min-height: 100vh;
+          /* mobile viewport bug fix */
+          min-height: -webkit-fill-available;
+        }
+      }
+    </style>
 
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" /> -->
 
