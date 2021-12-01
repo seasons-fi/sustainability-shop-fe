@@ -100,7 +100,7 @@
      ))
 
 (defn get-places-api [state-app]
-  (go (let [response (<! (http/get "http://142.93.164.153:443/places"
+  (go (let [response (<! (http/get "https://seasons-api.com/places"
                                    {:with-credentials? false}))]
         (reset! state-app (assoc-in @state-app [:places] (turn-realtime-db-to-geojson (:body response))))
         (reset! state-app (assoc-in @state-app [:geoJsonData] (.stringify js/JSON (turn-realtime-db-to-geojson (:body response))))))))
