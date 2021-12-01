@@ -368,9 +368,10 @@
                                 ;;  (initialize-geo @mapBox @directionCol false)
                                ))
       :component-did-update (fn []
-                              (if (:selectedLocation @state-app)
-                                (.. (clj->js @mapContainer) -attributeStyleMap (set "height" "40vh"))
-                                (.. (clj->js @mapContainer) -attributeStyleMap (set "height" "73.5vh")))
+                              (js/console.log "component-did-update" (clj->js @mapContainer) (clj->js (:selectedLocation @state-app)))
+                              ;; (if (:selectedLocation @state-app)
+                              ;;    (.. (clj->js @mapContainer) -attributeStyleMap (set "height" "40vh"))
+                              ;;    (.. (clj->js @mapContainer) -attributeStyleMap (set "height" "73.5vh")))
 
                               (. @global-geojsonLayer remove)
                               (initialize-geo (:mapBox @state-app) (:geoJsonData @state-app))
