@@ -38,9 +38,11 @@
     ["/:category"
      {:name ::reuse-item
       ;; :parameters {:path {:category s/Int}}
-      ;; :controllers [{:parameters {:query [:category]}
-      ;;             :start (fn [parameters] (js/console.log "item start" (-> parameters :query :category)))
-      ;;             :stop  (fn [parameters] (js/console.log "item stop" (-> parameters :query :category)))}]
+      :controllers [{
+                   :start (fn [parameters] 
+                            (js/console.log "item start" (-> parameters :query :category))
+                            (reset! state-app (assoc-in @state-app [:subcategory] "subcategory")))
+                   :stop  (fn [parameters] (js/console.log "item stop" (-> parameters :query :category)))}]
       
       }]
     ]
@@ -54,7 +56,7 @@
      {:name ::reduce-page}]
     ["/:id"
      {:name ::reduce-item
-      :parameters {:path {:id s/Int}}
+      :parameters {:path {:id s/Str}}
       :controllers [{:parameters {:path [:id]}
                   :start (fn [parameters] (js/console.log "item start" (-> parameters :path :id)))
                   :stop  (fn [parameters] (js/console.log "item stop" (-> parameters :path :id)))}]
@@ -69,7 +71,7 @@
      {:name ::repair-page}]
     ["/:id"
      {:name ::repair-item
-      :parameters {:path {:id s/Int}}
+      :parameters {:path {:id s/Str}}
       :controllers [{:parameters {:path [:id]}
                   :start (fn [parameters] (js/console.log "item start" (-> parameters :path :id)))
                   :stop  (fn [parameters] (js/console.log "item stop" (-> parameters :path :id)))}]
@@ -85,7 +87,7 @@
      {:name ::recycle-page}]
     ["/:id"
      {:name ::recycle-item
-      :parameters {:path {:id s/Int}}
+      :parameters {:path {:id s/Str}}
       :controllers [{:parameters {:path [:id]}
                   :start (fn [parameters] (js/console.log "item start" (-> parameters :path :id)))
                   :stop  (fn [parameters] (js/console.log "item stop" (-> parameters :path :id)))}]

@@ -453,15 +453,37 @@
                               (initialize-features-in-view-selection (:mapBox @state-app) (:geoJsonData @state-app)))
                               
                               
-      :reagent-render #(map-render mapContainer "73.5vh")})))
+      :reagent-render #(map-render mapContainer "68.5vh")})))
 
-
+(defn breadcrumbs [path]
+  (js/console.log "incl" (str path) (clojure.string/includes? (str path) "map"))
+  [:div {:class "w-full block relative text-xl font-medium text-blue-600"}
+   (str (cond
+       (clojure.string/includes? (str path) "map") "Map"
+       (clojure.string/includes? (str path) "reduce") "Reduce"
+      :default "All")
+        "/"
+   (cond
+     (clojure.string/includes? (str path) "second hand") "second hand"
+     (clojure.string/includes? (str path) "vintage") "Vintage"
+     (clojure.string/includes? (str path) "flea") "Flea market"
+     :default ""))
+   (when (clojure.string/includes? (str path) "reduce")
+     [:span {:class "text-right float-right"} "reuse ->"])])
 
 (defn map-page [match state-app]
   (let [locations-in-map-view (filter-locations state-app (:locationsInMap @state-app))
          id (:id (:path-params match))]
+    
+    ;; (case
+    ;;    (clojure.string/includes? (str (:path (:match @state-app))) "map") "Map"
+    ;;    (clojure.string/includes? (str (:path (:match @state-app))) "reduce") "Reduce"
+    ;;    :else "All")
     [:<>
+     (breadcrumbs (:path (:match @state-app)))
+     
      [:div {:class "block relative h-full"} 
+      
       (if  (= (:mode @state-app) "map")
            [:<>
             [map-component (:geoJsonData @state-app) (:search-value @state-app) (:selectedLocation @state-app)]
@@ -492,7 +514,7 @@
 ;;       (reset! state-app (assoc-in @state-app [:selectedLocationID] id)))
     
 ;;     [:<>
-;;     ;;  [:p (str (:name (:data match)))]
+;;     ;;  
 ;;     ;;  [switch]
 
 

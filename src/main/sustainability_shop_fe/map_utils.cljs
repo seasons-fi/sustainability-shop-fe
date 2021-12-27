@@ -18,6 +18,9 @@
           (to-lowercase str)
           search)
          (clojure.string/includes?
+          (clojure.string/capitalize str)
+          search)
+         (clojure.string/includes?
           str
           search)
          (not (clojure.string/blank? matches))

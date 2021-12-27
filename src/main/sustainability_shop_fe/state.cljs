@@ -13,6 +13,7 @@
                               :selectedLocation nil
                               :search-value nil
                               :selectedLocationID nil
+                              :subcategory nil
                               :category nil
                               }))
 

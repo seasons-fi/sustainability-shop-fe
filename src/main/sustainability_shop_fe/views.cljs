@@ -35,7 +35,7 @@
                   :onClick (fn [evt]
                             (reset! state-app (assoc-in @state-app [:category] (:link s)))
                              )
-                  :href (str "/" (:link s))}
+                  :href (str "/" (:link s) "/" (clojure.string/join l))}
               l]])
           (:links s))]]])
     slides)])
