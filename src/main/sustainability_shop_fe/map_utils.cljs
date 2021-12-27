@@ -30,7 +30,8 @@
         coordanates (mapv
                      #(js/parseFloat %)
                      (js->clj location))]
-    (when (not false)
+    (js/console.log "coordanates" (empty? (clj->js coordanates)) (clj->js coordanates))
+    (when true
       {:type "Feature"
        :properties {:id (:id i)
                     :name (:name i)
@@ -52,15 +53,17 @@
        :geometry {:type "Point"
                   :coordinates (if-not (empty? coordanates)
                                  coordanates
-                                 [0 0])}})))
+                                 [0 0])}}
+                                 )))
 
 (defn turn-realtime-db-to-geojson [flat-data]
   (clj->js
    [{:type "FeatureCollection"
-     :features (map
-                (fn [i]
-                  (geojson-feature i))
-                (into [] (js->clj (. js/JSON (parse flat-data)) :keywordize-keys true)))}]))
+     :features (filter
+                #(not (= (:coordinates (:geometry %)) [0 0]))
+                (map
+                #(geojson-feature %)
+                (into [] (js->clj (. js/JSON (parse flat-data)) :keywordize-keys true))))}]))
 
 
 (defn filter-locations [state-app locations]

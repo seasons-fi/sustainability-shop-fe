@@ -5,6 +5,7 @@
 (def state-app (reagent/atom {:match {}
                               :mode "map"
                               :mapBox nil
+                              :geojsonLayer nil
                               :geoJsonData []
                               :locationsInMap []
                               :places []
