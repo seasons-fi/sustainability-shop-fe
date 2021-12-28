@@ -1,6 +1,6 @@
 (ns sustainability-shop-fe.core
   (:require [sustainability-shop-fe.views :refer [navigation]]
-            [sustainability-shop-fe.map-utils :refer [ get-places-api]]
+            [sustainability-shop-fe.map-utils :refer [get-places-api get-companies-api]]
             [sustainability-shop-fe.state :refer [state-app]]
             [sustainability-shop-fe.routes :refer [routes]]
             [reagent.dom :as rd]
@@ -93,7 +93,7 @@
   ;; (fetch-firebase-data! drawmap)
   (get-places-api state-app)
   ;; (fetch-directions!)
-  ;; (get-companies-api)
+  (get-companies-api state-app)
   (rd/render [current-page] (.getElementById js/document "app")))
 
 (defn init! []

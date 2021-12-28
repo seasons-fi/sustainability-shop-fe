@@ -163,7 +163,7 @@ li a:hover {
 }
 
 picture {
-  border-radius: 20px;
+  /* border-radius: 20px; */
   overflow: hidden;
   position: relative;
   width: 100%;

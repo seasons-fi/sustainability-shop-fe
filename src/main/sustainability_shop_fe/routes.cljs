@@ -29,7 +29,9 @@
     {:coercion reitit.coercion.schema/coercion
      :controllers [{:start (fn [_] (do 
                                      (get-places-api state-app)
-                                     (reset! state-app (assoc-in @state-app [:category] "reuse"))))}]
+                                     (reset! state-app (assoc-in @state-app [:category] "reuse"))
+                                     (reset! state-app (assoc-in @state-app [:subcategory] "subcategory"))
+                                     ))}]
      :view map-view
      }
     [""
@@ -38,10 +40,11 @@
     ["/:category"
      {:name ::reuse-item
       ;; :parameters {:path {:category s/Int}}
-      :controllers [{
-                   :start (fn [parameters] 
-                            (js/console.log "item start" (-> parameters :query :category))
-                            (reset! state-app (assoc-in @state-app [:subcategory] "subcategory")))
+      :controllers [{:start (fn [parameters] 
+                            (do 
+                              ;; (js/console.log "item start" (-> parameters :query :category))
+                              (reset! state-app (assoc-in @state-app [:subcategory] "subcategory")))
+                            )
                    :stop  (fn [parameters] (js/console.log "item stop" (-> parameters :query :category)))}]
       
       }]
