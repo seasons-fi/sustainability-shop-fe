@@ -297,7 +297,7 @@
 
 (defn map-render [mapContainer height]
   (fn []
-    [:div {:class "relative top-0 z-0"
+    [:div {:class "block absolute w-full top-0 z-0"
            :style {:height height}
            :id "mapid"
            :ref (fn [el]
@@ -456,7 +456,7 @@
                               (initialize-features-in-view-selection (:mapBox @state-app) (:geoJsonData @state-app)))
 
 
-      :reagent-render #(map-render mapContainer "60.5vh")})))
+      :reagent-render #(map-render mapContainer "80.5vh")})))
 
 (defn breadcrumbs [path]
   (js/console.log "incl" (str path) (clojure.string/includes? (str path) "map"))
@@ -474,7 +474,7 @@
    [switch]])
 
 (defn search-input [state-app]
-  [:input {:class " block absolute w-full h-10 border-2 border-solid border-blue-600 text-blue-600 rounded-full py-1 px-4 font-medium mt-3 z-50 bg-white bottom-0"
+  [:input {:class "block w-full h-10 border-2 border-solid border-blue-600 text-blue-600 rounded-full py-1 px-4 font-medium my-3 z-50 bg-white bottom-0"
            :type "text"
                     ;; :value @search-value
            :on-change (fn [evt]
@@ -495,12 +495,12 @@
       (if  (= (:mode @state-app) "map")
         [:<>
          [map-component (:geoJsonData @state-app) (:search-value @state-app) (:selectedLocation @state-app)]
-         [:div {:class "w-full relative -top-10 h-36"}
+         [:div {:class "w-full block absolute top-2/3 h-40 z-5 flex flex-col justify-end"}
+          (search-input state-app)
           (when-not (or (empty? locations-in-map-view) (:selectedLocation @state-app) (empty? (:geoJsonData @state-app)))
             [:div {:class "h-24 z-10"}
              [slick-slider locations-in-map-view (:mapBox @state-app) (:search-value @state-app)]])
           [selected-location (:selectedLocation @state-app) (:geoJsonData @state-app)]
-          (search-input state-app)
           ]]
         [:<>
          [list-render (map (:geoJsonData @state-app)) "Voglia"]
