@@ -134,7 +134,7 @@
 ;;     []))
 
 (defn switch []
-  [:div {:class "w-full"}
+  [:div {:class "inline"}
    [:button {:onClick (fn []
                         (reset! state-app (assoc-in @state-app [:mode] "list")))
              :type "button"
@@ -456,7 +456,7 @@
                               (initialize-features-in-view-selection (:mapBox @state-app) (:geoJsonData @state-app)))
 
 
-      :reagent-render #(map-render mapContainer "68.5vh")})))
+      :reagent-render #(map-render mapContainer "60.5vh")})))
 
 (defn breadcrumbs [path]
   (js/console.log "incl" (str path) (clojure.string/includes? (str path) "map"))
@@ -471,8 +471,7 @@
           (clojure.string/includes? (str path) "vintage") "Vintage"
           (clojure.string/includes? (str path) "flea") "Flea market"
           :default ""))
-   (when (clojure.string/includes? (str path) "reduce")
-     [:span {:class "text-right float-right"} "reuse ->"])])
+   [switch]])
 
 (defn search-input [state-app]
   [:input {:class " block absolute w-full h-10 border-2 border-solid border-blue-600 text-blue-600 rounded-full py-1 px-4 font-medium mt-3 z-50 bg-white bottom-0"
@@ -492,9 +491,7 @@
         id (:id (:path-params match))]
     [:<>
      (breadcrumbs (:path (:match @state-app)))
-     [switch]
      [:div {:class "block relative h-full"}
-
       (if  (= (:mode @state-app) "map")
         [:<>
          [map-component (:geoJsonData @state-app) (:search-value @state-app) (:selectedLocation @state-app)]
