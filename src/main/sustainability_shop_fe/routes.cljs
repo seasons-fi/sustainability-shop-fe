@@ -1,5 +1,6 @@
 (ns sustainability-shop-fe.routes
-  (:require [sustainability-shop-fe.views :refer [home-page add-page]]
+  (:require [sustainability-shop-fe.add-page :refer [add-page]]
+            [sustainability-shop-fe.home-page :refer [home-page]]
             [sustainability-shop-fe.map :refer [map-page]]
             [sustainability-shop-fe.map-utils :refer [get-places-api]]
             [sustainability-shop-fe.state :refer [state-app]]
@@ -30,7 +31,6 @@
      :controllers [{:start (fn [_] (do 
                                      (get-places-api state-app)
                                      (reset! state-app (assoc-in @state-app [:category] "reuse"))
-                                     (reset! state-app (assoc-in @state-app [:subcategory] "subcategory"))
                                      ))}]
      :view map-view
      }
@@ -40,11 +40,7 @@
     ["/:category"
      {:name ::reuse-item
       ;; :parameters {:path {:category s/Int}}
-      :controllers [{:start (fn [parameters] 
-                            (do 
-                              ;; (js/console.log "item start" (-> parameters :query :category))
-                              (reset! state-app (assoc-in @state-app [:subcategory] "subcategory")))
-                            )
+      :controllers [{
                    :stop  (fn [parameters] (js/console.log "item stop" (-> parameters :query :category)))}]
       
       }]

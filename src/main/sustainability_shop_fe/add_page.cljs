@@ -1,106 +1,15 @@
-(ns sustainability-shop-fe.views
+(ns sustainability-shop-fe.add-page
   (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [sustainability-shop-fe.ui :refer [h1 info]]
+  (:require
             [reagent.core :as reagent :refer [atom]]
             [sustainability-shop-fe.state :refer [state-app]]
             [sustainability-shop-fe.map-utils :refer [geojson-feature]]
             [reitit.frontend.easy :as rfe]
             [cljs-http.client :as http]
-            [cljs.core.async :refer [<!]]
-            ["react-slick" :as rs :default Slider]))
-
-
-(defn slick-slider [slides]
-  [(reagent/adapt-react-class Slider)
-   {:slidesToShow 1
-    :infinite true}
-   (map
-    (fn [s]
-      [:div
-       [:div {:class "bg-white h-full w-full px-3 py-16 block relative flex flex-col justify-end"}
-        [:div {:class "w-full flex flex-row justify-between"}
-         [:h1 {:class "text-8xl w-1/2 font-garamond font-extrabold italic text-blue-600 leading-none"}
-          [:span {:class "block text-8xl w-full font-garamond font-extrabold italic text-blue-600 leading-none"} "Re"]
-          (:name s)]
-         [:div {:class "relative w-1/2 text-xl font-avenir-medium border-blue-600 h-6"}
-          [:p  {:class "inline-block w-1/2 text-right pr-3 align-middle text-lg text-blue-600 float-left font-medium font-avenir-black"}
-           "reduce"]
-          [:img {:class "inline-block  w-1/2 align-middle float-left h-full"
-                 :src "/img/arrow.svg"}]]]
-        [:ul {:class "w-full mt-8"}
-         (map
-          (fn [l]
-            [:li {:class "block border-t-2 border-solid border-blue-600 py-3"}
-             [:a {:class "block w-full text-right font-medium text-xl text-blue-600 font-avenir-medium"
-                  :onClick (fn [evt]
-                            (reset! state-app (assoc-in @state-app [:category] (:link s)))
-                             )
-                  :href (str "/" (:link s) "/" (clojure.string/join l))}
-              l]])
-          (:links s))]]])
-    slides)])
+            [cljs.core.async :refer [<!]]))
 
 ;; -------------------------
 ;; Views
-
-(defn navigation [{:keys [links]}]
-  [:nav {:class "w-full relative px-3 pt-6 flex flex-row flex-no-wrap justify-between"}
-   [:a {:class ""
-        :href "/"} 
-    ;; [:h1 {:class ""} "seasons."]
-    [:img.max-50 {:src "/img/menu.svg"}]
-    ]
-   [:a {:class "border-2 border-solid border-blue-600 text-blue-600 rounded-full py-1 px-4 font-medium"
-        :href "/map"}
-    "map"]
-  ;;  (if (or (= (:mode @state-app) "map") (clojure.string/includes? (str (:path (:match @state-app))) "map"))
-  ;;    [:a {:class "border-2 border-solid border-blue-600 text-blue-600 rounded-full py-1 px-4 font-medium"
-  ;;       :href "/list"}
-  ;;   "list"]
-  ;;    [:a {:class "border-2 border-solid border-blue-600 text-blue-600 rounded-full py-1 px-4 font-medium"
-  ;;       :href "/map"}
-  ;;   "map"]
-  ;;    )
-   
-  ;;  [:a {:class "border-2 border-solid border-blue-600 text-blue-600 rounded-full py-1 px-4 font-medium"
-  ;;       :href "/add"}
-  ;;   "add"]
-   ])
-
-
-(defn home-page [{:keys [links]} & children]
-  [:div {:class "block relative bottom"}
-  ;;  [h1 "seasons."]
-  ;;  [info "
-  ;;        Find your way to be sustainably fashionable. 
-  ;;        Verified sustainabkle brands in Helsinki."]
-   [slick-slider [{:id 1
-                   :name "duce"
-                   :link "reduce"
-                   :links ["second hand" "flea markets" "vintage stores"]}
-                  {:id 2
-                   :name "use"
-                   :link "reuse"
-                   :links ["second hand" "flea markets" "vintage stores"]}
-                  {:id 3
-                   :name "pair"
-                   :link "repair"
-                   :links ["second hand" "flea markets" "vintage stores"]}
-                  {:id 4
-                   :name "cycle"
-                   :link "recycle"
-                   :links ["second hand" "flea markets" "vintage stores"]}]]
-  ;;  [:ul.brands
-  ;;   [:li {:key 0} [:a {:href "/map"} "eco-conscious brands"]]
-  ;;   [:li {:key 1} [:a {:href "/vintage"} "vintage stores"]]
-  ;;   [:li {:key 2} [:a {:href "/all"} "All"]]]
-   ])
-
-(defn brands-page [{:keys [brands]} & children]
-  [:div.col-12
-   [h1 "Brands"]
-   [:div
-    "This is verified sustainable brands"]])
 
 
 (defn add-place-api [state-app]
@@ -153,7 +62,7 @@
                         :city "Helsinki"
                         :company nil})]
     [:div {:class "h-full"}
-     [h1 "Add Place"]
+     [:h1 "Add Place"]
      [:form
       [:div
        [:input {:class "block w-full"

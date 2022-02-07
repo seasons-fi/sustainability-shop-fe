@@ -1,5 +1,5 @@
 (ns sustainability-shop-fe.map
-  (:require [sustainability-shop-fe.ui :refer [brand-modal]]
+  (:require 
             [reagent.core :as reagent :refer [atom]]
             [sustainability-shop-fe.state :refer [state-app]]
             [sustainability-shop-fe.map-utils :refer [includes-search-string filter-locations]]
