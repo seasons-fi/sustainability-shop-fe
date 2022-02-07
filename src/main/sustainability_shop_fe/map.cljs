@@ -124,18 +124,6 @@
 ;;                                    (. (first (.parse js/JSON @geoJsonData)) -features)))))
 ;;     []))
 
-(defn switch []
-  [:div {:class "inline"}
-   [:button {:onClick (fn []
-                        (reset! state-app (assoc-in @state-app [:mode] "list")))
-             :type "button"
-             :class (str "btn " (when-not (= (:mode @state-app) "map") "bold"))} "List"]
-   "/"
-   [:button {:onClick (fn []
-                        (reset! state-app (assoc-in @state-app [:mode] "map")))
-             :type "button"
-             :class (str "btn " (when (= (:mode @state-app) "map") "bold"))} "Map (eco-friendly stores nearby)"]])
-
 
 ;; (defn initialize-location-handling [mapbox]
 ;;   (.. leaflet/control (locate) (addTo mapbox))
@@ -148,7 +136,7 @@
    (if-not search-value
      (map
       (fn [f]
-        [:div {:class "h-20 bg-white p-3 mr-3 border border-solid border-red"
+        [:div {:class "h-20 bg-white p-3 mr-3"
                :onClick (fn [evt]
                           (reset! state-app (assoc-in @state-app [:selectedLocation] (js->clj f :keywordize-keys true)))
                           (let [latlng (leaflet/latLng (nth (. (. f -geometry) -coordinates) 1)
@@ -474,8 +462,7 @@
           (clojure.string/includes? (str path) "collection") "collection points"
           (clojure.string/includes? (str path) "recycling") "recycling centers"
           :default ""))
-   [:div.block
-    [switch]]])
+   ])
 
 (defn search-input [state-app]
   [:input {:class "block w-full h-12 border-2 border-solid border-blue-600 text-blue-600 rounded-full py-1 px-4 font-medium my-3 z-50 bg-white bottom-0"
