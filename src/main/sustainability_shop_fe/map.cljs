@@ -474,10 +474,11 @@
           (clojure.string/includes? (str path) "collection") "collection points"
           (clojure.string/includes? (str path) "recycling") "recycling centers"
           :default ""))
-   [switch]])
+   [:div.block
+    [switch]]])
 
 (defn search-input [state-app]
-  [:input {:class "block w-full h-10 border-2 border-solid border-blue-600 text-blue-600 rounded-full py-1 px-4 font-medium my-3 z-50 bg-white bottom-0"
+  [:input {:class "block w-full h-12 border-2 border-solid border-blue-600 text-blue-600 rounded-full py-1 px-4 font-medium my-3 z-50 bg-white bottom-0"
            :type "text"
                     ;; :value @search-value
            :on-change (fn [evt]
@@ -497,7 +498,7 @@
       (if  (= (:mode @state-app) "map")
         [:<>
          [map-component (:geoJsonData @state-app) (:search-value @state-app) (:selectedLocation @state-app)]
-         [:div {:class "w-full block absolute top-2/3 h-40 z-5 flex flex-col justify-end"}
+         [:div {:class "w-full block absolute bottom-5 h-40 z-5 flex flex-col justify-end"}
           (when-not (or (empty? locations-in-map-view) (:selectedLocation @state-app) (empty? (:geoJsonData @state-app)))
             [:div {:class "h-24 z-10"}
              (if (:category @state-app)
