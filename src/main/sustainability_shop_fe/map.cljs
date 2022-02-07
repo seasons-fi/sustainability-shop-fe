@@ -443,15 +443,18 @@
       :reagent-render #(map-render mapContainer "80.5vh")})))
 
 (defn breadcrumbs [path]
-  [:div {:class "w-full block relative text-xl font-medium text-blue-600"}
-   (str (cond
+  [:div {:class "w-full block relative text-xl font-medium text-blue-600 px-3 mt-6 mb-3"}
+   [:span {:class "w-full inline relative text-xl font-bold text-blue-600"} (cond
           (clojure.string/includes? (str path) "map") "Map"
           (clojure.string/includes? (str path) "reduce") "Reduce"
           (clojure.string/includes? (str path) "reuse") "Reuse"
           (clojure.string/includes? (str path) "repair") "Repair"
           (clojure.string/includes? (str path) "recycle") "Recycle"
-          :default "All")
+          :default "All")]
+   (str 
+        " "
         "/"
+        " "
         (cond
           (clojure.string/includes? (str path) "second hand") "second hand"
           (clojure.string/includes? (str path) "vintage") "Vintage"
