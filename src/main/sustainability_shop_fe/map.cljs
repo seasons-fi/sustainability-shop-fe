@@ -46,14 +46,9 @@
                        :id "mapbox/streets-v89"
                        :tileSize 512
                        :zoomOffset -1})]
-    (. mapbox (addEventListener "load" (fn [])
-
+    (. mapbox (addEventListener "load" (fn []
                                 (when-not (empty? (:geoJsonData @state-app))
-                                  (do
-                                    (js/console.log "load 1" (clj->js (:geoJsonData @state-app)))
                                     (when-not (empty? (.parse js/JSON (:geoJsonData @state-app)))
-                                      (do
-                                        (js/console.log "load 2" (clj->js (:geoJsonData @state-app)))
                                         (reset! state-app (assoc-in @state-app [:locationsInMap]
                                                                     (mapv))
                                                 (fn [feat]
@@ -63,9 +58,7 @@
                                                              (contains
                                                               f))
                                                       feat)))
-                                                (. (first (.parse js/JSON (:geoJsonData @state-app))) -features))))))))
-
-
+                                                (. (first (.parse js/JSON (:geoJsonData @state-app))) -features)))))))
     (. mapbox (setView #js [60.1699, 24.9384] 13))
     (. newTiles (addTo mapbox))))
 
@@ -77,12 +70,10 @@
                                                           (:features (nth (js->clj
                                                                            (.parse js/JSON (:geoJsonData @state-app))
                                                                            :keywordize-keys true) 0)) (- (js/parseInt (:selectedLocationID @state-app)) 1))]
-
                                                      (reset-map-to-point #js{:lat (last (:coordinates (:geometry selectedLocationById))) :lng (first (:coordinates (:geometry selectedLocationById)))} (:mapBox @state-app))
                                                      (reset! state-app (assoc-in @state-app [:selectedLocation] (js->clj selectedLocationById :keywordize-keys true))))))
 
                          :reagent-render (fn [selectedLocation geoJsonData]
-
                                            (when selectedLocation
                                              [:div {:class "bg-white relative w-4/5 h-56 p-6 z-10 mx-auto block"}
                                               [:button {:onClick (fn []
@@ -182,16 +173,10 @@
                           (rfe/href (keyword "sustainability-shop-fe.routes" "map-item") {:id (:id (:properties (js->clj f :keywordize-keys true)))})
                           (rfe/push-state (keyword "sustainability-shop-fe.routes" "map-item") {:id (:id (:properties (js->clj f :keywordize-keys true)))}))}
          [:h2 {:class "text-xl font-medium text-blue-600"}
-          (str (. (. f -properties) -name))]
-    ;;      [:span (str (. (. f -properties) -city))]
-         "text"])
+          (str (. (. f -properties) -name))]])
       (filter-locations
        state-app
        (. (first (.parse js/JSON (:geoJsonData @state-app))) -features))))])
-
-
-
-
 
 
 (defn initialize-geo [mapbox geoJsonData]
@@ -200,7 +185,8 @@
         ;;                               :html " test "})
         geojsonLayer (leaflet/geoJson
                       (.parse js/JSON geoJsonData)
-                      #js {:pointToLayer
+                       #js {
+                           :pointToLayer
                            (fn [feature latlng]
                             ;;  #js {:icon myIcon}
                              (. markers
@@ -213,18 +199,12 @@
                                                         (rfe/href (keyword "sustainability-shop-fe.routes" "map-item") {:id (:id (:properties (js->clj feature :keywordize-keys true)))})
                                                         (rfe/push-state (keyword "sustainability-shop-fe.routes" "map-item") {:id (:id (:properties (js->clj feature :keywordize-keys true)))})))))))
 
-                            ;;  (.. markers (bindPopup (:name (:properties
-                            ;;                                  (js->clj feature :keywordize-keys true)))) openPopup)
 
-                          ;;  :onEachFeature (fn [feature featureLayer])
                            :filter (fn [feature]
-                                     (if (clojure.string/blank? (:search-value @state-app))
+                                     (if (:category @state-app)
+                                      (if (= (:category @state-app) (:category (:properties (js->clj feature :keywordize-keys true))))
+                                       (if (clojure.string/blank? (:search-value @state-app))
                                        true
-                                      ;;  (if (:category @state-app)
-                                      ;;   (let [category (:category (:properties (js->clj feature :keywordize-keys true)))]
-                                      ;;     (= category (:category @state-app)))
-
-                                      ;;   true)
                                        (let [name (:name (:properties (js->clj feature :keywordize-keys true)))
                                              address (:address (:properties (js->clj feature :keywordize-keys true)))
                                              city (:city (:properties (js->clj feature :keywordize-keys true)))]
@@ -241,13 +221,35 @@
                                                 name
                                                 (:search-value @state-app)))
                                            true
-                                           false))))})]
+                                           false)))
+                                        false
+                                      )
+                                        (if (clojure.string/blank? (:search-value @state-app))
+                                          true
+                                          (let [name (:name (:properties (js->clj feature :keywordize-keys true)))
+                                                address (:address (:properties (js->clj feature :keywordize-keys true)))
+                                                city (:city (:properties (js->clj feature :keywordize-keys true)))]
+                                            (if  (or
+                                                  (when (not (nil? address))
+                                                    (includes-search-string
+                                                     address
+                                                     (:search-value @state-app)))
+                                                  (when (not (nil? city))
+                                                    (includes-search-string
+                                                     city
+                                                     (:search-value @state-app)))
+                                                  (includes-search-string
+                                                   name
+                                                   (:search-value @state-app)))
+                                              true
+                                              false))))
+                                           )})]
     (reset! global-geojsonLayer geojsonLayer)
     (. geojsonLayer
        (addTo mapbox))))
 
 (defn initialize-features-in-view-selection [mapbox geoJsonData]
-  (. mapbox (addEventListener "viewreset" (fn [])
+  (. mapbox (addEventListener "viewreset" (fn []
 
                               (when-not (empty? (.parse js/JSON geoJsonData))
                                 (reset! state-app (assoc-in @state-app [:locationsInMap]
@@ -259,9 +261,7 @@
                                                                           (contains
                                                                            f))
                                                                    feat)))
-                                                             (. (first (.parse js/JSON geoJsonData)) -features)))))))
-
-
+                                                             (. (first (.parse js/JSON geoJsonData)) -features))))))))
 
   (. mapbox (addEventListener "moveend" (fn []
 
@@ -291,8 +291,6 @@
                                                                                        f))
                                                                                feat)))
                                                                          (. (first (.parse js/JSON geoJsonData)) -features)))))))))
-
-
 
 
 (defn map-render [mapContainer height]
@@ -333,8 +331,6 @@
                  [:span {:class "text-md font-medium text-blue-600"} "open" "----------------" "Thu"]]]])
                  ]])
     
-
-
 
 ;; (defn turn-realtime-db-to-geojson [flat-data]
 ;;   (clj->js
@@ -442,11 +438,11 @@
                                    (initialize-geo (:mapBox @state-app) (:geoJsonData @state-app))
 
                                    (initialize-features-in-view-selection (:mapBox @state-app) (:geoJsonData @state-app)))
-                                 (initialize-geo (:mapBox @state-app) yh))))
+                                 (do
+                                  (initialize-geo (:mapBox @state-app) yh)))))
                                 ;;  (initialize-geo @mapBox @directionCol false)
 
       :component-did-update (fn []
-                              (js/console.log "map component did-update" (clj->js @mapContainer) (clj->js (:selectedLocation @state-app)))
                               ;; (if (:selectedLocation @state-app)
                               ;;    (.. (clj->js @mapContainer) -attributeStyleMap (set "height" "40vh"))
                               ;;    (.. (clj->js @mapContainer) -attributeStyleMap (set "height" "73.5vh")))
@@ -459,17 +455,24 @@
       :reagent-render #(map-render mapContainer "80.5vh")})))
 
 (defn breadcrumbs [path]
-  (js/console.log "incl" (str path) (clojure.string/includes? (str path) "map"))
   [:div {:class "w-full block relative text-xl font-medium text-blue-600"}
    (str (cond
           (clojure.string/includes? (str path) "map") "Map"
           (clojure.string/includes? (str path) "reduce") "Reduce"
+          (clojure.string/includes? (str path) "reuse") "Reuse"
+          (clojure.string/includes? (str path) "repair") "Repair"
+          (clojure.string/includes? (str path) "recycle") "Recycle"
           :default "All")
         "/"
         (cond
           (clojure.string/includes? (str path) "second hand") "second hand"
           (clojure.string/includes? (str path) "vintage") "Vintage"
           (clojure.string/includes? (str path) "flea") "Flea market"
+          (clojure.string/includes? (str path) "brands") "sustainable brands"
+          (clojure.string/includes? (str path) "rentals") "clothing rentals"
+          (clojure.string/includes? (str path) "atelies") "atelies"
+          (clojure.string/includes? (str path) "collection") "collection points"
+          (clojure.string/includes? (str path) "recycling") "recycling centers"
           :default ""))
    [switch]])
 
@@ -487,8 +490,7 @@
                                 (reset! state-app (assoc-in @state-app [:search-value] (-> evt .-target .-value))))}])
 
 (defn map-page [match state-app]
-  (let [locations-in-map-view (filter-locations state-app (:locationsInMap @state-app))
-        id (:id (:path-params match))]
+  (let [locations-in-map-view (filter-locations state-app (:locationsInMap @state-app))]
     [:<>
      (breadcrumbs (:path (:match @state-app)))
      [:div {:class "block relative h-full"}
@@ -496,24 +498,19 @@
         [:<>
          [map-component (:geoJsonData @state-app) (:search-value @state-app) (:selectedLocation @state-app)]
          [:div {:class "w-full block absolute top-2/3 h-40 z-5 flex flex-col justify-end"}
-          (search-input state-app)
           (when-not (or (empty? locations-in-map-view) (:selectedLocation @state-app) (empty? (:geoJsonData @state-app)))
             [:div {:class "h-24 z-10"}
-             [slick-slider locations-in-map-view (:mapBox @state-app) (:search-value @state-app)]])
+             (if (:category @state-app)
+               [slick-slider (filter 
+                              (fn [item] (= (. (. item -properties) -category) 
+                                                    (:category @state-app)))
+                                locations-in-map-view) (:mapBox @state-app) (:search-value @state-app)]
+              [slick-slider locations-in-map-view (:mapBox @state-app) (:search-value @state-app)])])
           [selected-location (:selectedLocation @state-app) (:geoJsonData @state-app)]
-          ]]
+          (search-input state-app)]]
         [:<>
          [list-render (map (:geoJsonData @state-app)) "Voglia"]
          [list-render (map (:geoJsonData @state-app)) "nanso"]
-          ])]]))
-
-
-;;     (when id
-;;       (reset! state-app (assoc-in @state-app [:selectedLocationID] id)))
-;;     [:<>
-;;     ;;  
-;;     ;;  [switch]
-;;   ;; (reset-map-to-point @mapBox)
-;;          [list-of-brands (map (:geoJsonData @state-app))])]]]
-;; [:div {:class "absolute block w-full bottom-0 h-40"} 
-;;  ]
+         [:div {:class "w-full block absolute top-2/3 h-40 z-5 flex flex-col justify-end"}
+          (search-input state-app)
+          ]])]]))
