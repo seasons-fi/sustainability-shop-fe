@@ -290,34 +290,33 @@
                   (reset! mapContainer el))}]))
 
 (defn list-render [_ company]
-    [:<>
-    [:h1 company]
-    [(reagent/adapt-react-class Slider)
-     {:slidesToShow 1.5
-      :infinite false}
-               (for [item (filter 
-                          #(= (:name (:properties %)) company )
-                          (:features (nth (js->clj
-                                        
-                                         (.parse js/JSON (:geoJsonData @state-app))
-                                        :keywordize-keys true) 0)))]
-              
-              [:div {:class "h-auto min-h-24 bg-white mr-3 "}
+    [:div.px-3.mb-b
+     [:h1.text-2xl.text-blue-600 company]
+     [(reagent/adapt-react-class Slider)
+      {:slidesToShow 1.5
+       :infinite false}
+      (for [item (filter
+                  #(= (:name (:properties %)) company)
+                  (:features (nth (js->clj
+
+                                   (.parse js/JSON (:geoJsonData @state-app))
+                                   :keywordize-keys true) 0)))]
+
+        [:div {:class "h-auto min-h-24 bg-white mr-3 "}
                ;; border border-solid border-red
-               [:button 
-                {:class "block relative w-full"
-                 :onClick (fn []
-                            (reset! state-app (assoc-in @state-app [:selectedLocation] (js->clj item))))}
+         [:button
+          {:class "block relative w-full"
+           :onClick (fn []
+                      (reset! state-app (assoc-in @state-app [:selectedLocation] (js->clj item))))}
                           ;; (reset-map-to-point feature latlng mapbox)
-                [:div {:class "block relative min-h-24 w-full px-1"}
-                 [:picture {:class "block relative h-90 w-full"}
-                  (if (empty? (:image (:properties item)))
-                    [:img {:src "https://images.unsplash.com/photo-1504198458649-3128b932f49e?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1000&amp;q=80"}]
-                    [:img {:src (:image (:properties item))}])]
-                 [:h2 {:class "text-xl font-medium text-blue-600"}
-                  (str (:name (:properties item)))]
-                 [:span {:class "text-md font-medium text-blue-600"} "open" "----------------" "Thu"]]]])
-                 ]])
+          [:div {:class "block relative min-h-24 w-full px-1"}
+           [:picture {:class "block relative h-90 w-full"}
+            (if (empty? (:image (:properties item)))
+              [:img {:src "https://images.unsplash.com/photo-1504198458649-3128b932f49e?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1000&amp;q=80"}]
+              [:img {:src (:image (:properties item))}])]
+           [:h2 {:class "text-xl font-medium text-blue-600"}
+            (str (:name (:properties item)))]
+           [:span {:class "text-md font-medium text-blue-600"} "open" "----------------" "Thu"]]]])]])
     
 
 ;; (defn turn-realtime-db-to-geojson [flat-data]
@@ -484,7 +483,7 @@
   (let [locations-in-map-view (filter-locations state-app (:locationsInMap @state-app))]
     [:<>
      (breadcrumbs (:path (:match @state-app)))
-     [:div {:class "block relative h-full"}
+     [:div {:class "block relative h-full overflow-scroll"}
       (if  (= (:mode @state-app) "map")
         [:<>
          [map-component (:geoJsonData @state-app) (:search-value @state-app) (:selectedLocation @state-app)]
@@ -502,6 +501,4 @@
         [:<>
          [list-render (map (:geoJsonData @state-app)) "Voglia"]
          [list-render (map (:geoJsonData @state-app)) "nanso"]
-         [:div {:class "w-full block absolute top-2/3 h-40 z-5 flex flex-col justify-end"}
-          (search-input state-app)
-          ]])]]))
+         ])]]))
