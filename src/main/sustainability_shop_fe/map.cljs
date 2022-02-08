@@ -296,7 +296,7 @@
       {:slidesToShow 1.5
        :infinite false}
       (for [item (filter
-                  #(= (:name (:properties %)) company)
+                  #(clojure.string/includes? (:name (:properties %)) company)
                   (:features (nth (js->clj
 
                                    (.parse js/JSON (:geoJsonData @state-app))
@@ -499,6 +499,7 @@
           [selected-location (:selectedLocation @state-app) (:geoJsonData @state-app)]
           (search-input state-app)]]
         [:<>
-         [list-render (map (:geoJsonData @state-app)) "Voglia"]
+         [:div.mb-6
+          [list-render (map (:geoJsonData @state-app)) "Voglia"]]
          [list-render (map (:geoJsonData @state-app)) "nanso"]
          ])]]))
