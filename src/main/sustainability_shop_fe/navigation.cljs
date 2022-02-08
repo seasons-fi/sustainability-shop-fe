@@ -18,6 +18,7 @@
                       (reset! state-app (assoc-in @state-app [:mode] "list"))
                       (reset! state-app (assoc-in @state-app [:mode] "map"))))}
     (if (= (:mode @state-app) "map") 
+      "list"
       "map"
-      "list")]
+      )]
    ])
