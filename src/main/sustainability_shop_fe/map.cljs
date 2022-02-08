@@ -316,7 +316,8 @@
               [:img {:src (:image (:properties item))}])]
            [:h2 {:class "text-xl font-medium text-blue-600"}
             (str (:name (:properties item)))]
-           [:span {:class "text-md font-medium text-blue-600"} "open" "----------------" "Thu"]]]])]])
+          ;;  [:span {:class "text-md font-medium text-blue-600"} "open" "----------------" "Thu"]
+           ]]])]])
     
 
 ;; (defn turn-realtime-db-to-geojson [flat-data]
