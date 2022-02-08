@@ -88,7 +88,10 @@
 
                                               [:div
                                                [:h2 {:class "text-xl font-medium text-blue-600"}
-                                                (:name (:properties selectedLocation))]]]))}))
+                                                (:name (:properties selectedLocation))]
+                                               [:p
+                                                {:class "text-sm font-regular text-blue-600"}
+                                                (str (:address (:properties selectedLocation)))]]]))}))
 
 
 
@@ -313,11 +316,6 @@
               [:img {:src (:image (:properties item))}])]
            [:h2 {:class "text-xl font-medium text-blue-600"}
             (str (:name (:properties item)))]
-           [:p 
-            {:class "text-sm font-regular text-blue-600"}
-            (str (:address (:properties item)))
-
-            ]
            [:span {:class "text-md font-medium text-blue-600"} "open" "----------------" "Thu"]]]])]])
     
 
@@ -485,7 +483,7 @@
   (let [locations-in-map-view (filter-locations state-app (:locationsInMap @state-app))]
     [:<>
      (breadcrumbs (:path (:match @state-app)))
-     [:div {:class "block relative h-full overflow-scroll mt-12"}
+     [:div {:class "block relative h-full overflow-scroll"}
       (if  (= (:mode @state-app) "map")
         [:<>
          [map-component (:geoJsonData @state-app) (:search-value @state-app) (:selectedLocation @state-app)]
@@ -500,7 +498,7 @@
               [slick-slider locations-in-map-view (:mapBox @state-app) (:search-value @state-app)])])
           [selected-location (:selectedLocation @state-app) (:geoJsonData @state-app)]
           (search-input state-app)]]
-        [:<>
+        [:div.mt-12
          [:div.mb-6
           [list-render (map (:geoJsonData @state-app)) "Voglia"]]
          [list-render (map (:geoJsonData @state-app)) "nanso"]
