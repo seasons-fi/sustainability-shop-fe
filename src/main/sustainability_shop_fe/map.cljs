@@ -469,7 +469,6 @@
 (defn search-input [state-app]
   [:input {:class "block w-full h-12 border-2 border-solid border-blue-600 text-blue-600 rounded-full py-1 px-4 font-medium my-3 z-50 bg-white bottom-0"
            :type "text"
-                    ;; :value @search-value
            :on-change (fn [evt]
                       (try
                                   (. (:mapBox @state-app) (fitBounds (. @global-geojsonLayer getBounds)))
@@ -496,8 +495,10 @@
                                                     (:category @state-app)))
                                 locations-in-map-view) (:mapBox @state-app) (:search-value @state-app)]
               [slick-slider locations-in-map-view (:mapBox @state-app) (:search-value @state-app)])])
-          [selected-location (:selectedLocation @state-app) (:geoJsonData @state-app)]
-          (search-input state-app)]]
+          (if (:selectedLocation @state-app)
+           [selected-location (:selectedLocation @state-app) (:geoJsonData @state-app)]
+           (search-input state-app))
+          ]]
         [:div.mt-12
          [:div.mb-6
           [list-render (map (:geoJsonData @state-app)) "Voglia"]]
