@@ -85,13 +85,8 @@
                                                         :class "btn btn-dark"
                                                         :data-dismiss "modal"
                                                         :aria-label "Close"} "Close"]
-                                              ;; [:img {:class "card-img-top"
-                                              ;;        :src (if (not (clojure.string/blank? (:image (:properties selectedLocation))))
-                                              ;;               (:image (:properties selectedLocation))
-                                              ;;               "https://images.unsplash.com/photo-1504198458649-3128b932f49e?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1000&amp;q=80")}]
 
                                               [:div
-                                               (:id (:properties selectedLocation))
                                                [:h2 {:class "text-xl font-medium text-blue-600"}
                                                 (:name (:properties selectedLocation))]]]))}))
 
@@ -291,7 +286,7 @@
 
 (defn list-render [_ company]
     [:div.px-3.mb-b
-     [:h1.text-2xl.text-blue-600 company]
+     [:h1 {:class "text-6xl text-blue-600 font-garamond"} company]
      [(reagent/adapt-react-class Slider)
       {:slidesToShow 1.5
        :infinite false}
@@ -302,12 +297,14 @@
                                    (.parse js/JSON (:geoJsonData @state-app))
                                    :keywordize-keys true) 0)))]
 
-        [:div {:class "h-auto min-h-24 bg-white mr-3 "}
-               ;; border border-solid border-red
+        [:div {:class "h-auto min-h-24 bg-white mr-3 slide-in-list "}
          [:button
           {:class "block relative w-full"
            :onClick (fn []
-                      (reset! state-app (assoc-in @state-app [:selectedLocation] (js->clj item))))}
+                      (reset! state-app (assoc-in @state-app [:selectedLocation] (js->clj item)))
+                      (reset! state-app (assoc-in @state-app [:mode] "map"))
+                      (rfe/href (keyword "sustainability-shop-fe.routes" "map-item") {:id (:id (:properties (js->clj item :keywordize-keys true)))})
+                      (rfe/push-state (keyword "sustainability-shop-fe.routes" "map-item") {:id (:id (:properties (js->clj item :keywordize-keys true)))}))}
                           ;; (reset-map-to-point feature latlng mapbox)
           [:div {:class "block relative min-h-24 w-full px-1"}
            [:picture {:class "block relative h-90 w-full"}
@@ -316,6 +313,11 @@
               [:img {:src (:image (:properties item))}])]
            [:h2 {:class "text-xl font-medium text-blue-600"}
             (str (:name (:properties item)))]
+           [:p 
+            {:class "text-sm font-regular text-blue-600"}
+            (str (:address (:properties item)))
+
+            ]
            [:span {:class "text-md font-medium text-blue-600"} "open" "----------------" "Thu"]]]])]])
     
 
@@ -483,7 +485,7 @@
   (let [locations-in-map-view (filter-locations state-app (:locationsInMap @state-app))]
     [:<>
      (breadcrumbs (:path (:match @state-app)))
-     [:div {:class "block relative h-full overflow-scroll"}
+     [:div {:class "block relative h-full overflow-scroll mt-12"}
       (if  (= (:mode @state-app) "map")
         [:<>
          [map-component (:geoJsonData @state-app) (:search-value @state-app) (:selectedLocation @state-app)]
