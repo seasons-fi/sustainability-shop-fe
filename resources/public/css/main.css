@@ -90,53 +90,6 @@ body {
   transition: all 0.5s;
 }
 
-/* input, textarea{
-    margin: 0px auto;
-    width: 90%;
-    height: 60px;
-    display: block;
-    padding: 1em;
-    padding-bottom: 0em;
-    border-bottom: 1px solid black;
-} */
-.to-block {
-  display: block;
-}
-
-.max-50 {
-  max-height: 50px;
-}
-
-.max-300 {
-  max-height: 300px;
-}
-
-.info-button {
-  border-bottom: 3px solid black;
-  text-align: left;
-  font-size: 2rem;
-  color: black;
-  text-decoration: none;
-  padding: 0;
-}
-
-.info-button:hover {
-  text-decoration: none;
-}
-
-.prod-image {
-  display: block;
-  margin: auto 20px;
-  width: 80%;
-}
-
-#mapid {
-  width: 96%;
-  display: block;
-  left: 2%;
-  right: 2%;
-}
-
 /* .location-in-map-view{
     z-index: 10000000000000000000000000;
 } */
@@ -326,7 +279,6 @@ h1 {
   z-index: 10;
   position: relative;
   text-overflow: ellipsis;
-  white-space: nowrap;
   max-width: 100%;
   min-width: 1px;
   font-family: "Avenir LT Std Black", Helvetica, sans-serif;
@@ -338,7 +290,6 @@ h2 {
   z-index: 10;
   position: relative;
   text-overflow: ellipsis;
-  white-space: nowrap;
   max-width: 100%;
   min-width: 1px;
   font-family: "Avenir LT Std Black", Helvetica, sans-serif;
@@ -350,7 +301,6 @@ h3 {
   z-index: 10;
   position: relative;
   text-overflow: ellipsis;
-  white-space: nowrap;
   max-width: 100%;
   min-width: 1px;
   font-family: "Avenir LT Std Book", Helvetica, sans-serif;
@@ -394,34 +344,4 @@ p.info {
 .switch .bold {
   font-family: "Avenir LT Std Black", Helvetica, sans-serif;
   text-decoration: underline;
-}
-
-.font-garamond {
-  font-family: "EB Garamond", serif;
-}
-
-.font-avenir-medium {
-  font-family: "Avenir LT Std Medium";
-}
-
-.font-avenir-black {
-  font-family: "Avenir LT Std Black";
-}
-
-.slick-slide:not(first) {
-  padding-right: 1.5rem;
-}
-
-.slick-next {
-  right: 25px;
-  color: black;
-  background-color: black;
-  /* z-index: 9000000000000000000000000; */
-}
-
-.slick-next:hover,
-.slick-next:focus {
-  color: black;
-  outline: none;
-  background-color: black;
 }
