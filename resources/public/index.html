@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SEASONS.</title>
+    <title>Umberto Eco.</title>
     <link
       rel="icon"
       href="https://clojurescript.org/images/cljs-logo-icon-32.png"
@@ -71,6 +71,51 @@
     <link rel="stylesheet" type="text/css" href="/css/grid-shapes.css" />
     <link rel="stylesheet" href="text/css" href="/css/map.css" />
     <style>
+      .splash {
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #ffffff;
+        z-index: 100;
+      }
+
+      .splash img {
+        display: block;
+        margin: 40vh auto;
+        height: 20vh;
+        width: auto;
+      }
+
+      .splash h1 {
+        display: block;
+        margin: 0 auto;
+        font-size: 2.5em;
+        font-weight: 700;
+        font-style: normal;
+        font-family: "EB Garamond", serif;
+        color: rgba(37, 99, 235, var(--tw-text-opacity));
+        text-align: center;
+        text-transform: uppercase;
+        text-decoration: none;
+        letter-spacing: 0.05em;
+        line-height: 1.5em;
+
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .splash.display-none {
+        opacity: 0;
+        z-index: -10;
+        transition: all 0.5s;
+      }
+
       .font-garamond {
         font-family: "EB Garamond", serif;
       }
@@ -235,9 +280,11 @@
   </head>
 
   <body>
-    <!-- <div class="splash">
-      <h1 class="font-garamond">seasons.</h1>
-    </div> -->
+    <div id="app" class="">
+      <div class="splash">
+        <h1 class="font-garamond">Umberto Eco.</h1>
+      </div>
+    </div>
     <script>
       var splash = document.querySelector(".splash");
       document.addEventListener("DOMContentLoaded", function () {
@@ -246,10 +293,11 @@
         }, 2000);
       });
     </script>
-    <div id="app" class="">
-      <h2>Figwheel template</h2>
-      <p>Checkout your developer console.</p>
-    </div>
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
     <!-- <div id='product-component-1601566215329'></div>
 <script type="text/javascript">
 /*<![CDATA[*/
