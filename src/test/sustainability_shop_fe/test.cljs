@@ -1,6 +1,6 @@
 (ns sustainability-shop-fe.test
   (:require [cljs.test :refer (deftest is use-fixtures testing)]
-            [sustainability-shop-fe.map-utils :refer [to-lowercase includes-search-string]]))
+            [sustainability-shop-fe.map.map-utils :refer [to-lowercase includes-search-string]]))
 
 
 (deftest test-regex

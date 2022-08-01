@@ -3,7 +3,7 @@
             [sustainability-shop-fe.state :refer [state-app]]
             ["react-slick" :as rs :default Slider]))
 
-(defn slick-slider [slides]
+(defn slick-slider-home [slides]
   [(reagent/adapt-react-class Slider)
    {:slidesToShow 1
     :infinite true}

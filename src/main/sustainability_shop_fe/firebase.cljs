@@ -1,6 +1,9 @@
 (ns sustainability-shop-fe.firebase
-  (:require
-   ["firebase" :default firebase]))
+  (:require-macros [cljs.core.async.macros :refer [go]])
+  (:require [clojure.string :as str]
+            [cljs-http.client :as http]
+            [cljs.core.async :refer [<!]]
+            ["firebase" :default firebase]))
 
 (defn init-firebase []
   (. firebase (initializeApp
@@ -34,3 +37,8 @@
     ;;   (reset! geoJsonData (.stringify js/JSON (turn-realtime-db-to-geojson allLocations) )))
       ;; )
      )))
+
+
+
+
+

@@ -3,7 +3,7 @@
   (:require
             [reagent.core :as reagent :refer [atom]]
             [sustainability-shop-fe.state :refer [state-app]]
-            [sustainability-shop-fe.map-utils :refer [geojson-feature]]
+            [sustainability-shop-fe.map.map-utils :refer [geojson-feature]]
             [reitit.frontend.easy :as rfe]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]))
