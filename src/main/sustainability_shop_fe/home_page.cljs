@@ -4,6 +4,7 @@
             [sustainability-shop-fe.navigation :refer [navigation]]
             [sustainability-shop-fe.list-component :refer [list-render]]
             [sustainability-shop-fe.map.map-utils :refer [filter-locations-by-search-list-fuse]]
+            [sustainability-shop-fe.map.leaflet-map-component :refer [map-component]]
             [sustainability-shop-fe.filters :refer [filteredList fullFilters]]
             [sustainability-shop-fe.grid :refer [grid-wrapper grid-item]]))
 
@@ -25,14 +26,19 @@
    [:<>
     [navigation]
     ;; MOBILE
-    [:div {:class "block md:hidden"}
+    [:div {:class "block md:hidden"} 
      (if-not emptySearchValue
        [:section {:class "p-3"}
         [grid-wrapper
          (map
           (fn [i] [grid-item i])
           filteredItems)]]
-       [slick-slider-home [{:id 1
+       [:<>
+        [:section {:class "p-6 pt-12 h-screen"}
+           [:h1 {:class "text-6xl text-blue-600 font-medium text-justify	"}
+            "Umberto Eco is a discovery platform for sustainable fashion choices in Helsinki."]]
+        
+         [slick-slider-home [{:id 1
                             :name "duce"
                             :link "reduce"
                             :links ["sustainable brands" "clothing rentals"]}
@@ -47,7 +53,7 @@
                            {:id 4
                             :name "cycle"
                             :link "recycle"
-                            :links ["collection points" "recycling centers"]}]])]
+                            :links ["collection points" "recycling centers"]}]]])]
     ;; DESKTOP
     [:div {:class "hidden md:block px-12 py-3 xl:p-12"}
      [:<>
@@ -93,8 +99,10 @@
         [:<>
          (when emptySearchValue
           [:section {:class "py-3 xl:py-12"}
-          [:h1 {:class "text-8xl text-blue-600 font-medium "}
-           "Umberto Eco is a discovery platform for sustainable fashion choices in Helsinki."]]) 
+           [:h1 {:class "text-8xl text-blue-600 font-medium "}
+            "Umberto Eco is a discovery platform for sustainable fashion choices in Helsinki."]]) 
+         [:div {:class "my-6"}
+          [map-component "60.5vh" (:geoJsonData @state-app) (:search-value @state-app) (:selectedLocation @state-app) (:filter @state-app)]]
          [fullFilters state-app emptySearchValue filteredItems]
          (when-not (empty? (:filter @state-app))
            [grid-wrapper

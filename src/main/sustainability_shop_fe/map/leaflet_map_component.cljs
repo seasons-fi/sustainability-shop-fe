@@ -52,7 +52,7 @@
     ;; if selected location, set view to selected location coordinates
     (if (:selectedLocation @state-app)
       (let [coords (:coordinates (:geometry (:selectedLocation @state-app)))]
-        (. mapbox (setView (leaflet/latLng (clj->js coords)) 18)))
+        (. mapbox (setView (leaflet/latLng (last (clj->js coords)) (first (clj->js coords))) 18)))
       (. mapbox (setView #js [60.1699, 24.9384] 13)))
     (. newTiles (addTo mapbox))))
 
@@ -72,7 +72,7 @@
                                     (addEventListener "click"
                                                       (fn []
                                                         ;; TODO: figure out why reset-map-to-point does not work here
-                                                        (. (:mapBox @state-app) (flyTo latlng))
+                                                        ;; (. (:mapBox @state-app) (flyTo latlng))
                                                         ;; (reset-map-to-point #js{:lat 60.1699 :lng 24.9384} nil)
                                                         (reset! state-app (assoc-in @state-app [:selectedLocation] (js->clj feature :keywordize-keys true)))
                                                         (rfe/href (keyword "sustainability-shop-fe.routes" "map-item") {:id (:id (:properties (js->clj feature :keywordize-keys true)))})
@@ -283,7 +283,7 @@
            :ref (fn [el]
                   (reset! mapContainer el))}]))
 
-(defn map-component [_ _ _ _]
+(defn map-component [height _ _ _ _]
   (let [mapContainer (atom nil)]
     (reagent/create-class
      {:component-did-mount (fn []
@@ -308,4 +308,4 @@
                               (. (:global-geojsonLayer @state-app) remove)
                               (initialize-geo (:mapBox @state-app) (:geoJsonData @state-app) (:filter @state-app))
                               (initialize-features-in-view-selection (:mapBox @state-app) (:geoJsonData @state-app) (:filter @state-app)))
-      :reagent-render #(map-render mapContainer "80.5vh")})))
+      :reagent-render #(map-render mapContainer height)})))

@@ -118,7 +118,7 @@
 (defn appliedFiltersSection [state-app emptySearchValue]
   [:div {:class "border-r-2 border-blue-600 border-solid pr-6"}
            [:h2 {:class "block text-blue-600 my-3"} 
-            "Applied filters: " (count (:filter @state-app))]
+            "Currently filtered by: " (count (:filter @state-app))]
            (when-not emptySearchValue
              [:p {:class "inline-block w-auto bg-blue-600 text-white px-3 py-1"} (:search-value @state-app)])
            (map
@@ -129,7 +129,7 @@
             (:filter @state-app))])
 
 (defn fullFilters [state-app emptySearchValue filteredItems]
-  [:section {:class "flex flex-wrap gap-2  border-b-2 border-blue-600 border-solid"}
+  [:section {:class "flex flex-wrap gap-2 border-t-2 border-b-2 border-blue-600 border-solid"}
           [filterComponent state-app]
           [appliedFiltersSection state-app emptySearchValue]
           [:div [:h2 {:class "hidden md:block text-blue-600 my-3 "} 

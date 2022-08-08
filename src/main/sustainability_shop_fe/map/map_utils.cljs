@@ -95,7 +95,7 @@
                        ;; :keys (keys i)
                     }
        :geometry {:type "Point"
-                  :coordinates [(:number (:lon (:properties i))) (:number (:lat (:properties i)))] 
+                  :coordinates [(:number (:lon (:properties i))) (:number (:lat (:properties i))) ] 
                   ;; 
                   }})
 
@@ -188,7 +188,7 @@
                                    :website (:url (:website (:properties i)))
                                    :subcategory  (:name (:select (:subcategory (:properties i))))
                                    :category (:name (:select (:category (:properties i))))
-                                   :location [(:lon (:properties i)) (:lat (:properties i))]
+                                   :location [(:lat (:properties i)) (:lon (:properties i))]
                                    :onlineOnly (:checkbox (:isonline (:properties i)))
                                    :tags (map
                                           #(:name %)

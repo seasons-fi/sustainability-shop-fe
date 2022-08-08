@@ -115,8 +115,8 @@
   [:div {:class "h-min bg-white p-3 mr-3"
          :onClick (fn [evt]
                           (reset! state-app (assoc-in @state-app [:selectedLocation] (js->clj f :keywordize-keys true)))
-                          (let [latlng (leaflet/latLng (nth (. (. f -geometry) -coordinates) 1)
-                                                       (nth (. (. f -geometry) -coordinates) 0))]
+                          (let [latlng (leaflet/latLng (nth (. (. f -geometry) -coordinates) 0)
+                                                       (nth (. (. f -geometry) -coordinates) 1))]
                             (reset-map-to-point latlng mapbox))
                           (rfe/href (keyword "sustainability-shop-fe.routes" "map-item") {:id (:id (:properties (js->clj f :keywordize-keys true)))})
                           (rfe/push-state (keyword "sustainability-shop-fe.routes" "map-item") {:id (:id (:properties (js->clj f :keywordize-keys true)))}))}
@@ -130,8 +130,8 @@
   [:div {:class "h-24 bg-white p-6 mr-3"
                :onClick (fn [evt]
                           (reset! state-app (assoc-in @state-app [:selectedLocation] (js->clj f :keywordize-keys true)))
-                          (let [latlng (leaflet/latLng (nth (. (. f -geometry) -coordinates) 1)
-                                                       (nth (. (. f -geometry) -coordinates) 0))]
+                          (let [latlng (leaflet/latLng (nth (. (. f -geometry) -coordinates) 0)
+                                                       (nth (. (. f -geometry) -coordinates) 1))]
                             (reset-map-to-point latlng mapbox))
                           (rfe/href (keyword "sustainability-shop-fe.routes" "map-item") {:id (:id (:properties (js->clj f :keywordize-keys true)))})
                           (rfe/push-state (keyword "sustainability-shop-fe.routes" "map-item") {:id (:id (:properties (js->clj f :keywordize-keys true)))}))}

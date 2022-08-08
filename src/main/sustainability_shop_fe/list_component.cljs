@@ -23,14 +23,14 @@
                   (:list @state-app))] 
          [:button
           {:class "block relative w-24"
-           :onClick (fn []
+           :onClick (fn [evt]
                       (let [featureClj (js->clj item :keywordize-keys true)]
                         (when (:number (first (:location item)))
-                          (let [latlng (leaflet/latLng (:number (nth (:location featureClj) 1)) (:number (nth (:location featureClj) 0)))]
+                          (let [latlng (leaflet/latLng (:number (nth (:location featureClj) 0)) (:number (nth (:location featureClj) 1)))]
                             (do
                               (js/console.log "list item location" (:number (first (:location item))) (:number (nth (:location featureClj) 0)) latlng)
                               (reset! state-app (assoc-in @state-app [:selectedLocation] {:geometry {:type "Point"
-                                                                                                     :coordinates [(:number (nth (:location featureClj) 1)) (:number (nth (:location featureClj) 0))]}
+                                                                                                     :coordinates [(:number (nth (:location featureClj) 0)) (:number (nth (:location featureClj) 1))]}
                                                                                           :properties (js->clj item :keywordize-keys true)}))
                              ;; flyTo does work because the map component not set yet
                              ;; (reset-map-to-point latlng)

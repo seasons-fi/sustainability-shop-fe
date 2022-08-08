@@ -12,7 +12,7 @@
            :value (:search-value @state-app)
            :autoComplete "on"
            :on-focus (fn [evt] (reset-logger state-app "searchSelected" true "set search to focus")) 
-           ;; :on-blur (fn [evt] (reset-logger state-app "searchSelected" false "set search to focus"))
+           ;;:on-blur (fn [evt]  (reset-logger state-app "searchSelected" false "set search to focus"))
            :on-change (fn [evt]
                         (try
                           (. (:mapBox @state-app) (fitBounds (. (:global-geojsonLayer @state-app) getBounds)))
