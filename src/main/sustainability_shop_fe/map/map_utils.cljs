@@ -2,7 +2,8 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [clojure.string :as str]
             [cljs-http.client :as http]
-            [cljs.core.async :refer [<!]]))
+            [cljs.core.async :refer [<!]]
+            ["fuse.js" :as Fuse]))
 
 (defn to-lowercase [str]
   (clojure.string/lower-case str))
@@ -69,19 +70,22 @@
     
       {:type "Feature"
        :properties {:id (:id i)
-                       :type "place"
-                       :name (:plain_text (first (:title (:Name (:properties i)))))
-                       :country (:name (:select (:country (:properties i))))
-                       :city (:name (:select (:city (:properties i))))
-                       :address (:plain_text (first (:rich_text (:address (:properties i)))))
-                       :image  (:url (:image (:properties i)))
-                       :website (:url (:website i))
-                       :subcategory  (:name (:select (:subcategory (:properties i))))
-                       :category (:name (:select (:category (:properties i))))
-                       :onlineOnly (:checkbox (:isonline (:properties i)))
+                    :type "place"
+                    :name (:plain_text (first (:title (:Name (:properties i)))))
+                    :country (:name (:select (:country (:properties i))))
+                    :city (:name (:select (:city (:properties i))))
+                    :address (:plain_text (first (:rich_text (:address (:properties i)))))
+                    :image  (:url (:image (:properties i)))
+                    :website (:url (:website (:properties i)))
+                    :subcategory  (:name (:select (:subcategory (:properties i))))
+                    :category (:name (:select (:category (:properties i))))
+                    :onlineOnly (:checkbox (:isonline (:properties i)))
+                    :tags (map 
+                           #(:name %)
+                           (:multi_select (:tags (:properties i))))
                        ;; :location location
                       ;;  :location (:location i)
-                       :isBrickAndMortar true
+                    :isBrickAndMortar true
                        ;; :hours (:hours i)
                        ;; :phone (:phone i)
                        ;; :design (:design i)
@@ -89,7 +93,7 @@
                        ;; :materials (:materials i)
                        ;; :tags (:tags i)
                        ;; :keys (keys i)
-                       }
+                    }
        :geometry {:type "Point"
                   :coordinates [(:number (:lon (:properties i))) (:number (:lat (:properties i)))] 
                   ;; 
@@ -181,11 +185,15 @@
                                    :city (:name (:select (:city (:properties i))))
                                    :address (:plain_text (first (:rich_text (:address (:properties i)))))
                                    :image  (:url (:image (:properties i)))
-                                   :website (:url (:website i))
+                                   :website (:url (:website (:properties i)))
                                    :subcategory  (:name (:select (:subcategory (:properties i))))
                                    :category (:name (:select (:category (:properties i))))
                                    :location [(:lon (:properties i)) (:lat (:properties i))]
                                    :onlineOnly (:checkbox (:isonline (:properties i)))
+                                   :tags (map
+                                          #(:name %)
+                                          (:multi_select (:tags (:properties i))))
+                                   :description (:plain_text (first (:rich_text (:description (:properties i)))))
                                    
                        ;; :location (:location i)
                        ;; :isBrickAndMortar (:isBrickAndMortar i)
@@ -251,6 +259,59 @@
      (filter
       #(not (nil? %))
       locations))))
+
+
+(defn filter-locations-by-search-list [state-app] 
+  (if (clojure.string/blank? (:search-value @state-app)) 
+    (:list @state-app) 
+    (filter
+     (fn [l]
+       (let [name (:name l)
+             city (:city l)
+             address (:address l)
+             category (:category l)
+             subcategory (:category l)]
+         (or
+          (when (not (nil? address))
+            (includes-search-string
+             address
+             (:search-value @state-app)))
+          (when (not (nil? city))
+            (includes-search-string
+             city
+             (:search-value @state-app)))
+          (when (not (nil? category))
+            (includes-search-string
+             category
+             (:search-value @state-app)))
+          (when (not (nil? subcategory))
+            (includes-search-string
+             subcategory
+             (:search-value @state-app)))
+          (includes-search-string
+           name
+           (:search-value @state-app)))))
+     (:list @state-app))))
+
+(defn filter-locations-by-search-list-fuse [state-app]
+  (let [input-data (:list @state-app)
+        options {:keys ["name" "address" "category" "city" "country" "subcategory", "tags"]
+                 :includeScore true
+                 :shouldSort true}
+        search-string (clojure.string/blank? (:search-value @state-app))
+        fuseSearch (Fuse.
+                    (clj->js input-data)
+                    (clj->js options))
+        results (map
+                 #(:item %)
+                 (js->clj (. fuseSearch (search (str (:search-value @state-app)))) :keywordize-keys true))]
+   (do 
+     (js/console.log "fuse" (clj->js input-data) (clj->js (. fuseSearch (search (str (:search-value @state-app))))))
+    (if search-string
+    ;; TODO: refactor this to return no search resu
+    input-data 
+     results
+    ))))
 
 (defn get-places-api [state-app]
   (go (let [response (<! (http/get "https://seasons-api.com/places"

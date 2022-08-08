@@ -42,17 +42,17 @@
   ;;      [:a {:class "w-full text-left" 
   ;;           :href (str "/" "recycle")}
   ;;       [:h1 {:class (:h1 styles)} "Recycle"]]]]]
-   [:h1 {:class "font-garamond text-blue-600 text-3xl md:text-3xl text-left font-light	w-8/12 lg:w-11/12 "} "Umberto Eco"] 
-  ;;  [modeSwitch state-app]
-   [:div {:class "w-full block mt-2 lg:mt-8 flex flex-wrap justify-between"}
+   
+   [:h1 {:class "hidden md:block font-garamond text-blue-600 text-xl md:text-3xl text-left font-light	w-8/12 lg:w-11/12 "} 
+    [:a {:href "/explore"
+         :class "w-full"} "Umberto Eco"]]
+   [:div {:class "w-full block mt-2 lg:mt-2 flex flex-wrap justify-between"}
     [:div {:class "w-full"}
      (search-input state-app)]
-    ;; [:div {:class "w-1/6"}
-    ;;  (modeSwitch state-app)] 
-    ;; [:div {:class "w-4/6"}
-    ;;  (breadcrumbs (:path (:match @state-app)))]
     ;; [:div {:class "w-full"}
-    ;;  [filterComponent state-app]]
+    ;;  (modeSwitch state-app)] 
+    ;; [:div {:class "w-full"}
+    ;;  (breadcrumbs (:path (:match @state-app)))]
     ]
    
    ;; https://codepen.io/cyboc23/pen/NWqYyzx

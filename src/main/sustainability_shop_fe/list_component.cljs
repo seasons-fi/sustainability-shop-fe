@@ -13,7 +13,7 @@
             ["react-slick" :as rs :default Slider]))
 
 
-(defn reset-map-to-point [latlng _]
+(defn reset-map-to-point [latlng]
   (. (:mapBox @state-app) (flyTo latlng 18)))
 
 (defn slick-slider-list [company]
@@ -24,27 +24,18 @@
          [:button
           {:class "block relative w-24"
            :onClick (fn []
-                      (js/console.log (clj->js item))
-                      (let [
-                            featureClj (js->clj item :keywordize-keys true)
-                             ;; featureJS f
-                             ;;propertiesClj (js->clj (. item -properties) :keywordize-keys true)
-                             ;;propertiesJS (. featureJS -properties)
-                            ]
-                        (reset! state-app (assoc-in @state-app [:selectedLocation] (js->clj item)))
-                        
-                      ;; (let [latlng (leaflet/latLng (:number (nth (:location featureClj) 1)) (:number (nth (:location featureClj) 0)))]
-                      ;;       (reset-map-to-point latlng mapbox))
-                           (rfe/href (keyword "sustainability-shop-fe.routes" "map-item") {:id (:id item)})
-                           (rfe/push-state (keyword "sustainability-shop-fe.routes" "map-item") {:id (:id item)}))
-                           ;; (reset! state-app (assoc-in @state-app [:selectedLocation] (js->clj item)))
-                      ;; (reset! state-app (assoc-in @state-app [:mode] "map"))
-                      ;; 
-                      ;;(rfe/href (keyword "sustainability-shop-fe.routes" "map") {:id (:id (:properties (js->clj item :keywordize-keys true)))})
-                      ;;(rfe/push-state (keyword "sustainability-shop-fe.routes" "map") {:id (:id (:properties (js->clj item :keywordize-keys true)))})
-                      ;;(reset-map-to-point #js{:lat (last (:location item)) :lng (first (:location (:location item)))} (:mapBox @state-app))
-                      )}
-                          ;; (reset-map-to-point feature latlng mapbox)
+                      (let [featureClj (js->clj item :keywordize-keys true)]
+                        (when (:number (first (:location item)))
+                          (let [latlng (leaflet/latLng (:number (nth (:location featureClj) 1)) (:number (nth (:location featureClj) 0)))]
+                            (do
+                              (js/console.log "list item location" (:number (first (:location item))) (:number (nth (:location featureClj) 0)) latlng)
+                              (reset! state-app (assoc-in @state-app [:selectedLocation] {:geometry {:type "Point"
+                                                                                                     :coordinates [(:number (nth (:location featureClj) 1)) (:number (nth (:location featureClj) 0))]}
+                                                                                          :properties (js->clj item :keywordize-keys true)}))
+                             ;; flyTo does work because the map component not set yet
+                             ;; (reset-map-to-point latlng)
+                              (rfe/href (keyword "sustainability-shop-fe.routes" "map-item") {:id (:id item)})
+                              (rfe/push-state (keyword "sustainability-shop-fe.routes" "map-item") {:id (:id item)}))))))}
           [:div {:class "block relative min-h-24 w-full px-1"}
            [:picture {:class "block relative h-24 w-auto overflow-hidden"}
             (if (empty? (:image item))

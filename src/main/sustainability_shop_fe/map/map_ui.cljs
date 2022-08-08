@@ -31,9 +31,22 @@
                                                      (reset! state-app (assoc-in @state-app [:selectedLocation] (js->clj selectedLocationById :keywordize-keys true))))))
 
                          :reagent-render (fn [selectedLocation geoJsonData]
-                                           (when selectedLocation
-                                             [:div {:class "bg-white relative w-4/5 h-56 p-6 z-10 mx-auto block"}
-                                              [:div {:class "relative block w-full h-64 shadow bg-gray-300"
+                                           (let [loc (:properties selectedLocation)
+                                                 emptyAddress? (or (clojure.string/blank? (:address loc)) (empty? (:address loc)))
+                                                 emptyDescription? (or (clojure.string/blank? (:description loc)) (empty? (:description loc)))
+                                                 online? (:onlineOnly loc)
+                                                 website? (or  (clojure.string/blank? (:website loc)) (empty? (:website loc)))
+                                                 emptyTags? (empty? (:tags loc))
+                                                 tags (if-not emptyTags?
+                                                       [:<> 
+                                                        (map
+                                                             (fn [e] [:p {:class "inline bg-blue-600 p-1 text-white"} (str e)])
+                                                             (into [] (:tags loc)))]
+                                                        "")]
+                                             (js/console.log "selected tags" (clj->js (:tags loc)) tags)
+                                            (when selectedLocation
+                                             [:article {:class "bg-white relative w-7/8 h-max	 z-10 mx-auto block"}
+                                              [:div {:class "relative block w-full h-64 shadow bg-gray-300 bg-no-repeat bg-center	bg-cover	"
                                                      :style #js {:backgroundImage (str "url('" (:image (:properties selectedLocation)) "')")}}]
                                               [:button {:onClick (fn []
                                                                    (reset! state-app (assoc-in @state-app [:selectedLocation] nil))
@@ -41,17 +54,46 @@
                                                                    (rfe/href (keyword "sustainability-shop-fe.routes" "map") {})
                                                                    (rfe/push-state (keyword "sustainability-shop-fe.routes" "map") {}))
                                                         :type "button"
-                                                        :class "btn btn-dark absolute right-1 m-1 text-xl"
+                                                        :class "btn btn-dark absolute right-1 top-1 m-1 text-sm text-blue-600 font-medium z-5"
                                                         :data-dismiss "modal"
-                                                        :aria-label "Close"} "x"]
+                                                        :aria-label "Close"} "Close"]
 
                                               [:div
-                                               [:h2 {:class "text-xl font-medium text-blue-600"}
-                                                (:name (:properties selectedLocation))]
-                                               [:address {:class "text-sm font-regular text-blue-600"}
-                                                (str (:address (:properties selectedLocation)))]]]))}))
-
-
+                                               [:h2 {:class "text-3xl font-medium text-blue-600"}
+                                                (:name loc)]
+                                               [:p {:class "block w-full border-b-2 border-solid border-blue-600 
+                                                                font-medium text-blue-600 py-2"}
+                                                "category: "
+                                                (:category loc)]
+                                               [:p {:class "block w-full border-b-2 border-solid border-blue-600 
+                                                                font-medium text-blue-600 py-2"}
+                                                "subcategory: "
+                                                (:subcategory loc)]
+                                               (when-not (and online? emptyAddress?)
+                                                [:span {:class "block w-full border-b-2 border-solid border-blue-600 
+                                                                font-medium text-blue-600 py-2"}
+                                                 "address: "
+                                                 [:address {:class "text-sm font-regular text-blue-600 inline not-italic	"}
+                                                 (str (:address loc) ", " (:city loc))]])
+                                               (when online?
+                                                 [:div {:class "block w-full border-b-2 border-solid border-blue-600
+                                                                font-medium text-blue-600 py-2"}
+                                                  [:p "online"]
+                                                  [:a {:href "#"} "website: " (:website loc) ]]) 
+                                               [:div {:class "block w-full border-b-2 border-solid border-blue-600
+                                                              font-medium text-blue-600 py-3"}
+                                                  [:a {:href "#"} "website: " (:website loc) ]]
+                                               (when-not emptyDescription?
+                                                 [:span {:class "font-medium text-blue-600 py-2"}
+                                                  "description: "
+                                                  [:p {:class "block w-full border-b-2 border-solid border-blue-600"}
+                                                  (:description loc)]])
+                                               (when-not emptyTags?
+                                                 [:span  {:class "font-medium text-blue-600 py-2"}
+                                                  "tags: "
+                                                  [:p {:class "inline w-full border-b-2 border-solid border-blue-600"}
+                                                   tags]
+                                                  ])]])))}))
 
                                               ;; [:ul.list-group.list-group-flush
                                               ;;  [:li.list-group-item (:website (:properties selectedLocation))]
@@ -70,7 +112,7 @@
 
 
 (defn map-slide [f mapbox]
-  [:div {:class "h-20 bg-white p-3 mr-3"
+  [:div {:class "h-min bg-white p-3 mr-3"
          :onClick (fn [evt]
                           (reset! state-app (assoc-in @state-app [:selectedLocation] (js->clj f :keywordize-keys true)))
                           (let [latlng (leaflet/latLng (nth (. (. f -geometry) -coordinates) 1)
@@ -80,7 +122,8 @@
                           (rfe/push-state (keyword "sustainability-shop-fe.routes" "map-item") {:id (:id (:properties (js->clj f :keywordize-keys true)))}))}
          [:h2 {:class "text-xl font-medium text-blue-600"}
           (str (. (. f -properties) -name))] 
-         [:span (str (. (. f -properties) -address))]
+         [:span {:class "text-blue-600 text-sm font-light"}
+          (str (. (. f -properties) -address) ", " (. (. f -properties) -city))]
          ])
 
 (defn map-slide-search [f mapbox]
@@ -189,8 +232,8 @@
 ;;   (reagent/create-class {:reagent-render list-render}))
 
 (defn breadcrumbs [path]
-  [:div {:class " block relative text-xl font-medium text-blue-600 px-3 mt-6 mb-3"}
-   [:span {:class "w-full inline relative text-xl font-bold text-blue-600"} (cond
+  [:div {:class " block relative text-sm font-medium text-blue-600 my-2"}
+   [:span {:class "w-full inline relative text-sm font-bold text-blue-600"} (cond
           (clojure.string/includes? (str path) "all") "Map"
           (clojure.string/includes? (str path) "reduce") "Reduce"
           (clojure.string/includes? (str path) "reuse") "Reuse"

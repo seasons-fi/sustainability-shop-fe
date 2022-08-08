@@ -18,6 +18,21 @@
 
 ;;http://52.47.131.189:443/companies
 
+(defn set-item!
+  "Set `key' in browser's localStorage to `val`."
+  [key val]
+  (.setItem (.-localStorage js/window) key val))
+
+(defn get-item
+  "Returns value of `key' from browser's localStorage."
+  [key]
+  (.getItem (.-localStorage js/window) key))
+
+(defn remove-item!
+  "Remove the browser's localStorage value for the given `key`"
+  [key]
+  (.removeItem (.-localStorage js/window) key))
+
 (defn current-page []
   (let [route-data (:data (:match @state-app))]
     (fn []
@@ -28,7 +43,8 @@
          (let [view (:view (:data (:match @state-app)))]
            [view (:match @state-app) state-app])
          [:section {:class "w-full"}
-          [:h3 "404 - No page matched the address"]
+          [:p "Cannot find a sustaianable way to shop? Neither could we. Which is why we built this service. "]
+          [:p "Go explore or watch this video about sustainability..."]
           ])
        ])))
 
@@ -44,6 +60,7 @@
   ;; (fetch-directions!)
   (get-companies-api state-app)
   (fetch-data-notion-db! state-app)
+  ;; (reset! state-app (js->clj (get-item "state") :keywordize-keys true))
   (rd/render [current-page] (.getElementById js/document "app")))
 
 (defn init! []

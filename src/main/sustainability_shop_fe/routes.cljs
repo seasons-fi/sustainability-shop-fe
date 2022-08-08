@@ -8,11 +8,13 @@
             [reitit.coercion.schema]))
 
 
+
+
 (defn wait-for-it-page [match state-app]
   [:<>
    [:div {:class "block w-full flex flex-wrap flex-col	md:flex-row justify-center bg-blue-600 h-screen items-center	text-center "} 
     [:h1 {:class "text-3xl font-garamond text-white block w-1/2 lg:text-center"} "Umberto Eco."]
-    [:p {:class "text-6xl font-garamond text-white block w-1/2 md:text-left"} "Coming August 09, 2022"]
+    [:p {:class "text-5xl font-garamond text-white block w-1/2 md:text-left"} "Coming August 09, 2022"]
     ]])
 ;; Page views
 (defn dashboard-view [match state-app]
@@ -128,6 +130,7 @@
     {:coercion reitit.coercion.schema/coercion
      :controllers [{:start (fn [_] 
                             ;; (get-places-api state-app)
+                             ;; 
                              (fetch-data-notion-db! state-app)
                              (reset! state-app (assoc-in @state-app [:mode] "map"))
                              )}]

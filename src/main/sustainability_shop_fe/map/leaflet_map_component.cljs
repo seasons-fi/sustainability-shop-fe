@@ -48,7 +48,12 @@
                                     ;;                                        feat)))
                                     ;;                                  (. (first (.parse js/JSON (:geoJsonData @state-app))) -features))))
                                 )))
-    (. mapbox (setView #js [60.1699, 24.9384] 13))
+    ;; (. mapbox (setView #js [60.1699, 24.9384] 13))
+    ;; if selected location, set view to selected location coordinates
+    (if (:selectedLocation @state-app)
+      (let [coords (:coordinates (:geometry (:selectedLocation @state-app)))]
+        (. mapbox (setView (leaflet/latLng (clj->js coords)) 18)))
+      (. mapbox (setView #js [60.1699, 24.9384] 13)))
     (. newTiles (addTo mapbox))))
 
 (defn initialize-geo [mapbox geoJsonData filtersList]
