@@ -29,9 +29,6 @@
 (def routes
   ["/"
    [""
-    {:name ::frontpage
-     :view wait-for-it-page}]
-   ["explore"
     {:name ::homepage
      :view dashboard-view}]
    ["add"

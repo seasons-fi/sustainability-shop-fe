@@ -28,6 +28,8 @@
                  [lambdaisland/kaocha-junit-xml "0.0.76"]
                  [re-graph "0.1.14"]
                  [com.cognitect/transit-cljs "0.8.264"]
+                 [org.roman01la/virtual.list "0.1.1"]
+                 [cljsjs/react-virtualized "9.22.2-0" :exclusions [cljsjs/react]]
                  [cljsjs/leaflet "1.5.1-0"]
                  [cljsjs/leaflet-locatecontrol "0.43.0-1"]
                  [lein-shadow "0.3.1"]
@@ -64,8 +66,8 @@
   ;; Note that if a `deps.cljs` file is found in `:source-paths` it will take
   ;; priority over `:npm-deps` here in `project.clj` and be used instead.
   :npm-deps [[create-react-class "15.6.3"]
-             [react "16.8.6"]
-             [react-dom "16.8.6"]
+             [react "17.0.2"]
+             [react-dom "17.0.2"]
              [leaflet "1.7.1"]
              [leaflet.locatecontrol "0.72.0"]]
 

@@ -44,7 +44,7 @@
   ;;       [:h1 {:class (:h1 styles)} "Recycle"]]]]]
    
    [:h1 {:class "hidden md:block font-garamond text-blue-600 text-xl md:text-3xl text-left font-light	w-8/12 lg:w-11/12 "} 
-    [:a {:href "/explore"
+    [:a {:href "/"
          :class "w-full"} "Umberto Eco"]]
    [:div {:class "w-full block mt-2 lg:mt-2 flex flex-wrap justify-between"}
     [:div {:class "w-full"}
