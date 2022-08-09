@@ -47,9 +47,9 @@
                             :link "reuse"
                             :links ["second hand" "flea markets" "vintage stores"]}
                            {:id 3
-                            :name "pair"
-                            :link "repair"
-                            :links ["atelies"]}
+                            :name "gift"
+                            :link "gift"
+                            :links ["humanitarian help"]}
                            {:id 4
                             :name "cycle"
                             :link "recycle"

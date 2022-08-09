@@ -63,7 +63,7 @@
                       [:<>
                        [filterLabel "category" "reuse" filterList state-app "reuse"]
                        [filterLabel "category" "reduce" filterList state-app "reduce"]
-                      ;;  [filterLabel "category" "repair" filterList state-app "repair"]
+                       [filterLabel "category" "regift" filterList state-app "regift"]
                        [filterLabel "category" "recycle"  filterList state-app "recycle"]])
        
        (selectorBlock "Subcategory" filterList state-app "subcategoryList"
@@ -90,14 +90,18 @@
         (selectorBlock "Subcategory" filterList state-app "subcategoryList"
                        [:<>
                         [filterLabel "subcategory" "brand" filterList state-app "brand"]
-                        [filterLabel "subcategory" "rental" filterList state-app "rental"]])
+                        [filterLabel "subcategory" "rental" filterList state-app "rental"]
+                        [filterLabel "subcategory" "second hand" filterList state-app "second hand"]
+                        [filterLabel "subcategory" "vintage" filterList state-app "vintage"]
+                        [filterLabel "subcategory" "marketplace" filterList state-app "marketplace"]])
 
         (selectorBlock "Online" filterList state-app "isOnline"
                        [:<>
                         [filterLabel "onlineOnly" true filterList state-app "online"]])
         (selectorBlock "City" filterList state-app "city"
                        [:<>
-                        [filterLabel "city" "Helsinki" filterList state-app "Helsinki"]])]]))
+                        [filterLabel "city" "Helsinki" filterList state-app "Helsinki"]
+                        [filterLabel "city" "Turku" filterList state-app "Turku"]])]]))
 
 (defn filteredList [state-app alist]
   (let [list alist 
@@ -129,7 +133,7 @@
             (:filter @state-app))])
 
 (defn fullFilters [state-app emptySearchValue filteredItems]
-  [:section {:class "flex flex-wrap gap-2 border-t-2 border-b-2 border-blue-600 border-solid"}
+  [:section {:class "flex flex-wrap gap-2 md:border-t-2 border-b-2 border-blue-600 border-solid my-6"}
           [filterComponent state-app]
           [appliedFiltersSection state-app emptySearchValue]
           [:div [:h2 {:class "hidden md:block text-blue-600 my-3 "} 

@@ -106,6 +106,23 @@
                   :start (fn [parameters] (js/console.log "item start" (-> parameters :path :id)))
                   :stop  (fn [parameters] (js/console.log "item stop" (-> parameters :path :id)))}]
       }]]   
+   ["regift"
+    {:coercion reitit.coercion.schema/coercion
+     :controllers [{:start (fn [_] (do 
+                                      (get-places-api state-app)
+                                     ;; (fetch-data-notion-db! state-app)
+                                     (reset! state-app (assoc-in @state-app [:filter] (conj (:filter @state-app) {:criteria "category" :value "regift"})))
+                                     (swap! state-app (assoc-in @state-app [:category] "regift"))))}]
+     :view map-view}
+    [""
+     {:name ::regift-page}]
+    ["/:id"
+     {:name ::regift-item
+      :parameters {:path {:id s/Str}}
+      :controllers [{:parameters {:path [:id]}
+                  :start (fn [parameters] (js/console.log "item start" (-> parameters :path :id)))
+                  :stop  (fn [parameters] (js/console.log "item stop" (-> parameters :path :id)))}]
+      }]]   
    ["recycle"
     {:coercion reitit.coercion.schema/coercion
      :controllers [{:start (fn [_] (do 

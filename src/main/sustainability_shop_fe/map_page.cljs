@@ -67,10 +67,12 @@
      [:div {:class "px-3 md:px-12"}
       [fullFilters state-app emptySearchValue (filteredList state-app (:list @state-app))]
      [:<>
-      (if  (= (:mode @state-app) "map")
-        
-         [:div {:class "block relative grid grid-cols-1 md:grid-cols-2 gap-6"}
-         [map-component "80.5vh" (:geoJsonData @state-app) (:search-value @state-app) (:selectedLocation @state-app) (:filter @state-app)]
+      (if  (= (:mode @state-app) "map") 
+        [:div {:class "block relative grid grid-cols-1 md:grid-cols-2 gap-6"}
+        ;;  (when (:selectedLocation @state-app)
+        ;;   (when-not (:onlineOnly  (:properties (:selectedLocation @state-app)))
+          [map-component "80.5vh" (:geoJsonData @state-app) (:search-value @state-app) (:selectedLocation @state-app) (:filter @state-app)]
+            ;;))
          (when-not (or (empty? locations-in-map-view) (:selectedLocation @state-app) (empty? (:geoJsonData @state-app)))
            [:<>
             [:div {:class "block md:hidden relative w-full -top-60 super-z"}
@@ -91,7 +93,6 @@
             [:div {:class "hidden md:block relative w-full overflow-scroll"
                    :style #js {:height "80.5vh"}}
              [locations-in-map locations-in-map-view (:mapBox @state-app)]
-             [:p "Interact with the map to get place"]
               ;;  (do
               ;;    (swap! state-app (assoc-in @state-app [:selectedLocation] (js->clj (first (search-results)) :keywordize-keys true)))
               ;;    ;; [selected-location (:selectedLocation @state-app) (:geoJsonData @state-app)] 

@@ -77,6 +77,7 @@
                     :address (:plain_text (first (:rich_text (:address (:properties i)))))
                     :image  (:url (:image (:properties i)))
                     :website (:url (:website (:properties i)))
+                    :googleMapsLink (:url (:google_maps_directions_url (:properties i)))
                     :subcategory  (:name (:select (:subcategory (:properties i))))
                     :category (:name (:select (:category (:properties i))))
                     :onlineOnly (:checkbox (:isonline (:properties i)))
@@ -186,6 +187,7 @@
                                    :address (:plain_text (first (:rich_text (:address (:properties i)))))
                                    :image  (:url (:image (:properties i)))
                                    :website (:url (:website (:properties i)))
+                                   :googleMapsLink (:url (:google_maps_directions_url (:properties i)))
                                    :subcategory  (:name (:select (:subcategory (:properties i))))
                                    :category (:name (:select (:category (:properties i))))
                                    :location [(:lat (:properties i)) (:lon (:properties i))]

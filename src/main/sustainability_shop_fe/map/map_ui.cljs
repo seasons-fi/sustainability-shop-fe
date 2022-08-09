@@ -37,6 +37,7 @@
                                                  online? (:onlineOnly loc)
                                                  website? (or  (clojure.string/blank? (:website loc)) (empty? (:website loc)))
                                                  emptyTags? (empty? (:tags loc))
+                                                 googleMapsLink? (:googleMapsLink loc)
                                                  tags (if-not emptyTags?
                                                        [:<> 
                                                         (map
@@ -69,17 +70,19 @@
                                                                 font-medium text-blue-600 py-2"}
                                                 "subcategory: "
                                                 (:subcategory loc)]
-                                               (when-not (and online? emptyAddress?)
+                                               (if-not (or online? emptyAddress?)
                                                 [:span {:class "block w-full border-b-2 border-solid border-blue-600 
                                                                 font-medium text-blue-600 py-2"}
                                                  "address: "
                                                  [:address {:class "text-sm font-regular text-blue-600 inline not-italic	"}
-                                                 (str (:address loc) ", " (:city loc))]])
-                                               (when online?
+                                                  (str (:address loc) ", " (:city loc))"." (when googleMapsLink? 
+                                                                                           [:a {:href (:googleMapsLink loc)} "get directions"])]]
+                                                                                                (when online?
                                                  [:div {:class "block w-full border-b-2 border-solid border-blue-600
                                                                 font-medium text-blue-600 py-2"}
                                                   [:p "online"]
-                                                  [:a {:href "#"} "website: " (:website loc) ]]) 
+                                                  [:a {:href "#"} "website: " (:website loc) ]]))
+
                                                [:div {:class "block w-full border-b-2 border-solid border-blue-600
                                                               font-medium text-blue-600 py-3"}
                                                   [:a {:href "#"} "website: " (:website loc) ]]
